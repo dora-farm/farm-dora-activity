@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 public class DashboardDTO {
 
-
     @Setter
     @Getter
     @Builder
@@ -18,11 +17,13 @@ public class DashboardDTO {
     public static class SalesOverviewDTO {
         private LocalDateTime createdDate;
         private int price;
+        private Integer sellerId;
 
-        public static SalesOverviewDTO from(OrderOption orderOption, Order order) {
+        public static SalesOverviewDTO from(OrderOption orderOption) {
             return SalesOverviewDTO.builder()
-                    .createdDate(order.getCreatedDate())
+                    .createdDate(orderOption.getOrder().getCreatedDate())
                     .price(orderOption.getPrice())
+                    .sellerId(orderOption.getOptions().getSale().getSeller().getId())
                     .build();
         }
     }
