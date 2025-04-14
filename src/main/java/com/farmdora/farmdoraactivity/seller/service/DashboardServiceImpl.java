@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,17 +22,16 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
 
-        List<OrderOption> orderOptions = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
+        List<Object[]> dailySalesRawData = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
 
-        List<SalesOverviewDTO> salesOverviewDTOS = new ArrayList<>();
-
-        for (OrderOption orderOption : orderOptions) {
-            salesOverviewDTOS.add(SalesOverviewDTO.from(orderOption));
-        }
-
-        return salesOverviewDTOS;
-
-
+        return dailySalesRawData
+                .stream()
+                .map(row -> new SalesOverviewDTO(
+                        (LocalDate) row[0],
+                        (Integer) row[1],
+                        (Integer) row[2]
+                ))
+                .collect(Collectors.toList());
     }
 
 
