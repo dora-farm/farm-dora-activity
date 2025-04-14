@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface DashboardService {
+
     List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate);
 
 }

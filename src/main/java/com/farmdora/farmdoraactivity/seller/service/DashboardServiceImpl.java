@@ -19,11 +19,19 @@ public class DashboardServiceImpl implements DashboardService {
     private final DashboardRepository dashboardRepository;
 
     @Override
-    List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
+    public List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
 
         List<OrderOption> orderOptions = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
 
-        List<SalesOverviewDTO> salesOverviewList = new ArrayList<>();
+        List<SalesOverviewDTO> salesOverviewDTOS = new ArrayList<>();
+
+        for (OrderOption orderOption : orderOptions) {
+            salesOverviewDTOS.add(SalesOverviewDTO.from(orderOption));
+        }
+
+        return salesOverviewDTOS;
+
+
     }
 
 
