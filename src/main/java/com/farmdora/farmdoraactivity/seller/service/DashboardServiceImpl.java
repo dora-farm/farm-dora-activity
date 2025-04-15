@@ -141,6 +141,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
 
         List<Object[]> salesRawData = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
