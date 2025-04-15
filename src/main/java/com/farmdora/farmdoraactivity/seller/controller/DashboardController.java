@@ -1,6 +1,5 @@
 package com.farmdora.farmdoraactivity.seller.controller;
 
-import com.farmdora.farmdoraactivity.seller.dto.DashboardDTO.SalesOverviewDTO;
 import com.farmdora.farmdoraactivity.seller.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,27 +19,28 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
+    // 새로운 통합 엔드포인트
+    @GetMapping("/sales")
+    public ResponseEntity<Map<String, Object>> getSales(
+            @RequestParam Integer sellerId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "daily") String period) {
+
+        // 서비스 메서드가 이미 Map<String, Object> 타입을 반환하므로 바로 사용
+        Map<String, Object> response = dashboardService.getSalesData(sellerId, startDate, endDate, period);
+        return ResponseEntity.ok(response);
+    }
+
+    // 기존 엔드포인트는 하위 호환성을 위해 유지 (선택사항)
     @GetMapping("/daily-sales")
     public ResponseEntity<Map<String, Object>> getDailySales(
             @RequestParam Integer sellerId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
-        List<SalesOverviewDTO> salesData = dashboardService.findDailySalesBySellerId(sellerId, startDate, endDate);
-
-        // DTO를 차트 데이터 형식으로 변환
-        String[] labels = salesData.stream()
-                .map(sale -> sale.getCreatedDate().toString())
-                .toArray(String[]::new);
-
-        int[] data = salesData.stream()
-                .mapToInt(SalesOverviewDTO::getPrice)
-                .toArray();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("labels", labels);
-        response.put("data", data);
-
+        // 새로운 서비스 메서드를 호출하면서 daily 기간 지정
+        Map<String, Object> response = dashboardService.getSalesData(sellerId, startDate, endDate, "daily");
         return ResponseEntity.ok(response);
     }
 }
