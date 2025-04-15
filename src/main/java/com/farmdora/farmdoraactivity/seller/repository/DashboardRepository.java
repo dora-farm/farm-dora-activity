@@ -18,9 +18,10 @@ public interface DashboardRepository extends JpaRepository<OrderOption, Integer>
             "JOIN oo.options opt " +
             "JOIN opt.sale s " +
             "JOIN s.seller sel " +
-            "WHERE sel.id = :sellerId AND o.createdDate " +
+            "WHERE sel.id = :sellerId AND DATE(o.createdDate) " +
             "BETWEEN :startDate AND :endDate " +
-            "GROUP BY DATE(o.createdDate), sel.id ")
+            "GROUP BY DATE(o.createdDate), sel.id " +
+            "ORDER BY DATE(o.createdDate) ASC ")
     List<Object[]> findDailySalesBySellerId (
             @Param("sellerId") Integer sellerId,
             @Param("startDate") LocalDate startDate,
