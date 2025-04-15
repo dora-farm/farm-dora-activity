@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/my/seller")
+@RequestMapping("/api/my/seller/dashboard")
 @CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +22,7 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-    @GetMapping("/dashboard/sales")
+    @GetMapping("/daily-sales")
     public ResponseEntity<Map<String, Object>> getDailySales(
             @RequestParam Integer sellerId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

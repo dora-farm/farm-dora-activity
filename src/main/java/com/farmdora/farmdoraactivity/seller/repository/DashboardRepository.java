@@ -25,7 +25,6 @@ public interface DashboardRepository extends JpaRepository<OrderOption, Integer>
     List<Object[]> findDailySalesBySellerId (
             @Param("sellerId") Integer sellerId,
             @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate
-    );
+            @Param("endDate") LocalDate endDate);
 
 }

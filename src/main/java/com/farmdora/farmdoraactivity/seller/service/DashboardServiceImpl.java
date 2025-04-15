@@ -24,10 +24,10 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
 
-        List<Object[]> dailySalesRawData = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
+        List<Object[]> salesRawData = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
 
         // DB에서 가져온 데이터를 날짜를 키로 하는 맵으로 변환
-        Map<LocalDate, Integer> salesByDate = dailySalesRawData
+        Map<LocalDate, Integer> salesByDate = salesRawData
                 .stream()
                 .collect(Collectors.toMap(
                         row -> ((java.sql.Date) row[0]).toLocalDate(),
@@ -47,6 +47,4 @@ public class DashboardServiceImpl implements DashboardService {
 
         return result;
     }
-
-
 }
