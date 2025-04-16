@@ -1,6 +1,9 @@
 package com.farmdora.farmdoraactivity.seller.service;
 
-import com.farmdora.farmdoraactivity.seller.dto.DashboardDTO.*;
+import com.farmdora.farmdoraactivity.seller.dto.Period;
+import com.farmdora.farmdoraactivity.seller.dto.ProductRatioDTO;
+import com.farmdora.farmdoraactivity.seller.dto.SalesOverviewDTO;
+import com.farmdora.farmdoraactivity.seller.dto.StatusRatioDTO;
 import com.farmdora.farmdoraactivity.seller.mapper.DashboardMapper;
 import com.farmdora.farmdoraactivity.seller.repository.DashboardRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,84 +12,57 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
-@Slf4j
 public class DashboardServiceImpl implements DashboardService {
 
     private final DashboardRepository dashboardRepository;
     private final DashboardMapper dashboardMapper;
 
     @Override
-    public Map<String, Object> getSalesData(Integer sellerId, LocalDate startDate, LocalDate endDate, String period) {
+    @Transactional(readOnly = true)
+    public Map<String, Object> getSalesData(Integer sellerId, LocalDate startDate, LocalDate endDate, Period period) {
         List<SalesOverviewDTO> dailySales = findDailySalesBySellerId(sellerId, startDate, endDate);
-
-        // 요청된 기간에 따라 데이터 가공
-        if ("daily".equals(period)) {
+        if (period.equals(Period.DAILY)) {
             return dashboardMapper.formatDailyData(dailySales);
-        } else if ("weekly".equals(period)) {
+        } else if (period.equals(Period.WEEKLY)) {
             return dashboardMapper.formatWeeklyData(dailySales);
-        } else if ("monthly".equals(period)) {
+        } else if (period.equals(Period.MONTHLY)) {
             return dashboardMapper.formatMonthlyData(dailySales);
         }
-
-        // 기본값은 일별 데이터
         return dashboardMapper.formatDailyData(dailySales);
+    }
+
+    private List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
+        return dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate.plusDays(1));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
-
-        List<Object[]> salesRawData = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
-
-        // DB에서 가져온 데이터를 날짜를 키로 하는 맵으로 변환
-        Map<LocalDate, Integer> salesByDate = salesRawData
-                .stream()
-                .collect(Collectors.toMap(
-                        row -> ((java.sql.Date) row[0]).toLocalDate(),
-                        row -> {
-                            Long sumPrice = (Long) row[1];
-                            return sumPrice != null ? sumPrice.intValue() : 0;
-                        }
-                ));
-
-        // startDate부터 endDate까지의 모든 날짜를 포함하는 결과 생성
-        List<SalesOverviewDTO> result = new ArrayList<>();
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            // 해당 날짜의 매출이 있으면 그 값을, 없으면 0을 사용
-            int salesAmount = salesByDate.getOrDefault(date, 0);
-            result.add(new SalesOverviewDTO(date, salesAmount, sellerId));
+    public List<ProductRatioDTO> findProductTypeCountBySellerId(Integer sellerId) {
+        int totalOrder = dashboardRepository.countBySellerId(sellerId);
+        List<ProductRatioDTO> productTypeCountRawData = dashboardRepository.findProductTypeCountBySellerId(sellerId);
+        for (ProductRatioDTO productRatioDTO : productTypeCountRawData) {
+            productRatioDTO.setPercentage(totalOrder > 0 ? (productRatioDTO.getCount() * 100.0) / totalOrder : 0.0);
         }
 
-        return result;
+        return productTypeCountRawData;
     }
 
     @Override
-    public List<ProductRatioDTO> findProductTypeCountBySellerId(Integer sellerId) {
-
+    @Transactional(readOnly = true)
+    public List<StatusRatioDTO> findStatusTypeCountBySellerId(Integer sellerId) {
         int totalOrder = dashboardRepository.countBySellerId(sellerId);
-        List<Object[]> productTypeCountRawData = dashboardRepository.findProductTypeCountBySellerId(sellerId);
+        List<StatusRatioDTO> statusTypeCountRawData = dashboardRepository.findStatusTypeCountBySellerId(sellerId);
+        for (StatusRatioDTO statusRatioDTO : statusTypeCountRawData) {
+            statusRatioDTO.setPercentage(totalOrder > 0 ? statusRatioDTO.getCount() * 100.0 / totalOrder : 0.0);
+        }
 
-        return productTypeCountRawData.stream()
-                .map(rawData -> {
-                    String typename = (String) rawData[0];
-                    int count = ((Number) rawData[1]).intValue();
-                    double percentage = totalOrder > 0 ? (count * 100.0) / totalOrder : 0.0;
-
-                    return ProductRatioDTO.builder()
-                            .typename(typename)
-                            .count(count)
-                            .percentage(percentage)
-                            .build();
-                })
-                .collect(Collectors.toList());
+        return statusTypeCountRawData;
     }
 }

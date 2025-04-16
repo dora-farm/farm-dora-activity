@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.seller.mapper;
 
-import com.farmdora.farmdoraactivity.seller.dto.DashboardDTO.*;
+import com.farmdora.farmdoraactivity.seller.dto.SalesOverviewDTO;
+import com.farmdora.farmdoraactivity.seller.dto.SalesOverviewDTO.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,8 +20,8 @@ public class DashboardMapper {
                 .map(sale -> sale.getCreatedDate().toString())
                 .toArray(String[]::new);
 
-        int[] prices = dailySales.stream()
-                .mapToInt(SalesOverviewDTO::getPrice)
+        long[] prices = dailySales.stream()
+                .mapToLong(SalesOverviewDTO::getPrice)
                 .toArray();
 
         Map<String, Object> response = new HashMap<>();
@@ -32,7 +33,7 @@ public class DashboardMapper {
 
     public Map<String, Object> formatWeeklyData(List<SalesOverviewDTO> dailySales) {
 
-        Map<String, Integer> weeklyData = dailySales
+        Map<String, Long> weeklyData = dailySales
                 .stream()
                 .collect(Collectors.groupingBy(
                         sale -> {
@@ -45,11 +46,11 @@ public class DashboardMapper {
 
                             return String.format("%d월 %d주차", month, weekOfMonth);
                         },
-                        Collectors.summingInt(SalesOverviewDTO::getPrice)
+                        Collectors.summingLong(SalesOverviewDTO::getPrice)
                 ));
 
         // 월 순서대로 정렬하기 위한 커스텀 정렬 로직
-        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(weeklyData.entrySet());
+        List<Map.Entry<String, Long>> sortedEntries = new ArrayList<>(weeklyData.entrySet());
         sortedEntries.sort((e1, e2) -> {
             // "월월 주주차" 형식을 파싱하여 정렬
             String[] parts1 = e1.getKey().split("월 |주차");
@@ -72,8 +73,8 @@ public class DashboardMapper {
                 .map(Map.Entry::getKey)
                 .toArray(String[]::new);
 
-        int[] prices = sortedEntries.stream()
-                .mapToInt(Map.Entry::getValue)
+        long[] prices = sortedEntries.stream()
+                .mapToLong(Map.Entry::getValue)
                 .toArray();
 
         Map<String, Object> response = new HashMap<>();
@@ -85,17 +86,17 @@ public class DashboardMapper {
 
     public Map<String, Object> formatMonthlyData(List<SalesOverviewDTO> dailySales) {
         // 월별로 그룹화하여 합계 계산
-        Map<String, Integer> monthlyData = dailySales.stream()
+        Map<String, Long> monthlyData = dailySales.stream()
                 .collect(Collectors.groupingBy(
                         sale -> {
                             LocalDate date = sale.getCreatedDate();
                             return String.format("%d-%02d", date.getYear(), date.getMonthValue());
                         },
-                        Collectors.summingInt(SalesOverviewDTO::getPrice)
+                        Collectors.summingLong(SalesOverviewDTO::getPrice)
                 ));
 
         // 날짜순으로 정렬
-        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(monthlyData.entrySet());
+        List<Map.Entry<String, Long>> sortedEntries = new ArrayList<>(monthlyData.entrySet());
         sortedEntries.sort(Map.Entry.comparingByKey());
 
         // 응답 데이터 형식으로 변환
@@ -103,8 +104,8 @@ public class DashboardMapper {
                 .map(Map.Entry::getKey)
                 .toArray(String[]::new);
 
-        int[] prices = sortedEntries.stream()
-                .mapToInt(Map.Entry::getValue)
+        long[] prices = sortedEntries.stream()
+                .mapToLong(Map.Entry::getValue)
                 .toArray();
 
         Map<String, Object> response = new HashMap<>();
