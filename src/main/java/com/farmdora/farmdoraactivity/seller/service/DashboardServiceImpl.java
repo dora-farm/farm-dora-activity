@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,7 +41,24 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
-        return dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate.plusDays(1));
+        List<SalesOverviewDTO> salesDate = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
+
+        Map<LocalDate, SalesOverviewDTO> salesByDate = salesDate.stream()
+                .collect(Collectors.toMap(SalesOverviewDTO::getCreatedDate, dto -> dto));
+
+        List<SalesOverviewDTO> result = new ArrayList<>();
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            SalesOverviewDTO dto = salesByDate.get(currentDate);
+            if (dto == null) {
+                java.sql.Date sqlDate = java.sql.Date.valueOf(currentDate);
+                dto = new SalesOverviewDTO(sqlDate, 0L, sellerId);
+            }
+            result.add(dto);
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return result;
     }
 
     @Override
