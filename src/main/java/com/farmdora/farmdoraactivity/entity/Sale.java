@@ -28,6 +28,10 @@ public class Sale extends BaseTimeEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "type_id")
+    private SaleType type;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
