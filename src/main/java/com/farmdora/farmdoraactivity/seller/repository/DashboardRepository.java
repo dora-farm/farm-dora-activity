@@ -15,7 +15,7 @@ public interface DashboardRepository extends JpaRepository<OrderOption, Integer>
     @Query("SELECT DATE(o.createdDate), SUM(oo.price), sel.id " +
             "FROM OrderOption oo " +
             "JOIN oo.order o " +
-            "JOIN oo.options opt " +
+            "JOIN oo.option opt " +
             "JOIN opt.sale s " +
             "JOIN s.seller sel " +
             "WHERE sel.id = :sellerId AND DATE(o.createdDate) " +
@@ -27,4 +27,18 @@ public interface DashboardRepository extends JpaRepository<OrderOption, Integer>
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT COUNT(oo) FROM OrderOption oo " +
+            "JOIN oo.option o " +
+            "JOIN o.sale s " +
+            "WHERE s.seller.id = :sellerId ")
+    int countBySellerId(@Param("sellerId") Integer sellerId);
+
+    @Query("SELECT st.name, COUNT(oo) " +
+            "FROM OrderOption oo " +
+            "JOIN oo.option o " +
+            "JOIN o.sale s " +
+            "JOIN s.type st " +
+            "WHERE s.seller.id = :sellerId " +
+            "GROUP BY st.id, st.name ")
+    List<Object[]> findProductTypeCountBySellerId(@Param("sellerId") Integer sellerId);
 }
