@@ -1,7 +1,6 @@
 package com.farmdora.farmdoraactivity.seller.mapper;
 
 import com.farmdora.farmdoraactivity.seller.dto.SalesOverviewDTO;
-import com.farmdora.farmdoraactivity.seller.dto.SalesOverviewDTO.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -52,7 +51,7 @@ public class DashboardMapper {
         // 월 순서대로 정렬하기 위한 커스텀 정렬 로직
         List<Map.Entry<String, Long>> sortedEntries = new ArrayList<>(weeklyData.entrySet());
         sortedEntries.sort((e1, e2) -> {
-            // "월월 주주차" 형식을 파싱하여 정렬
+            // "n월 n주차" 형식을 파싱하여 정렬
             String[] parts1 = e1.getKey().split("월 |주차");
             String[] parts2 = e2.getKey().split("월 |주차");
 
