@@ -2,7 +2,6 @@ package com.farmdora.farmdoraactivity.admin.mapper;
 
 import com.farmdora.farmdoraactivity.admin.dto.OrderDTO;
 import com.farmdora.farmdoraactivity.admin.dto.UserDTO;
-import com.farmdora.farmdoraactivity.seller.dto.SalesOverviewDTO;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
