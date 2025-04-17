@@ -6,11 +6,14 @@ import java.time.LocalDate;
 
 @Setter
 @Getter
-@Builder
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
     private LocalDate createdDate;
     private Long totalPrice;
+
+    public OrderDTO(java.sql.Date createdDate, Long totalPrice) {
+        this.createdDate = createdDate != null ? createdDate.toLocalDate() : null;
+        this.totalPrice = totalPrice != null ? totalPrice : 0;
+    }
 }

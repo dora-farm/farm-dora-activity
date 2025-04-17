@@ -13,11 +13,11 @@ import java.util.List;
 @Repository
 public interface AdminJoinsRepository extends JpaRepository<User, Integer> {
 
-    @Query("SELECT new com.farmdora.farmdoraactivity.admin.dto.UserDTO(" +
-            "DATE(createdDate), COUNT(userId)) " +
-            "FROM User " +
-            "WHERE DATE(createdDate) BETWEEN :startDate AND :endDate " +
-            "GROUP BY DATE(createdDate) ")
+    @Query("SELECT new com.farmdora.farmdoraactivity.admin.dto.UserDTO( " +
+            "DATE(u.createdDate), COUNT(u.userId)) " +
+            "FROM User u " +
+            "WHERE DATE(u.createdDate) BETWEEN :startDate AND :endDate " +
+            "GROUP BY DATE(u.createdDate) ")
     List<UserDTO> findAllJoiners(
             @Param("startDate")LocalDate startDate,
             @Param("endDate")LocalDate endDate);
