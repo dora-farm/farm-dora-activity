@@ -3,7 +3,15 @@ package com.farmdora.farmdoraactivity.user.dto;
 import com.farmdora.farmdoraactivity.entity.User;
 import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDashboardDTO {
+    private UserInfoDTO userInfoDTO;
+    private ActivityInfoDTO activityInfoDTO;
 
     @Getter
     @Setter
@@ -23,5 +31,17 @@ public class UserDashboardDTO {
                     .email(user.getEmail())
                     .build();
         }
+    }
+
+    @Setter
+    @Getter
+    @Builder
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ActivityInfoDTO {
+        private Long totalAmount;
+        private Long reviewCount;
+        private Long inquiryCount;
     }
 }

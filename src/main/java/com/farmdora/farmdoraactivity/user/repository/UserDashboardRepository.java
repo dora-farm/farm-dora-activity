@@ -16,5 +16,5 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
     Long countReviewsByUserId(@Param("userId") Integer userId);
 
     @Query("SELECT COUNT(q) FROM Question q WHERE q.user.userId = :userId")
-    Long countQuestionsByUserId(@Param("userId") Integer userId);
+    Long countInquiriesByUserId(@Param("userId") Integer userId);
 }

@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.user.service;
 
 import com.farmdora.farmdoraactivity.entity.User;
+import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO.*;
 import com.farmdora.farmdoraactivity.user.repository.UserDashboardRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,26 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserInfoDTO findUserInfo(@Param("userId") Integer userId) {
+    public UserDashboardDTO getDashboardInfo(@Param("userId") Integer userId) {
         User userInfo = userDashboardRepository.findById(userId).orElse(null);
-        UserInfoDTO dto = UserInfoDTO.from(userInfo);
-        return dto;
+
+        UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfo);
+        log.info(userInfoDTO.toString());
+
+        Long totalAmount = userDashboardRepository.sumTotalAmount(userId);
+        Long reviewCount = userDashboardRepository.countReviewsByUserId(userId);
+        Long inquiryCount = userDashboardRepository.countInquiriesByUserId(userId);
+
+        ActivityInfoDTO activityInfoDTO = ActivityInfoDTO.builder()
+                .totalAmount(totalAmount != null ? totalAmount : 0L)
+                .reviewCount(reviewCount != null ? reviewCount : 0L)
+                .inquiryCount(inquiryCount != null ? inquiryCount : 0L)
+                .build();
+        log.info(activityInfoDTO.toString());
+
+        return UserDashboardDTO.builder()
+                .userInfoDTO(userInfoDTO)
+                .activityInfoDTO(activityInfoDTO)
+                .build();
     }
 }
