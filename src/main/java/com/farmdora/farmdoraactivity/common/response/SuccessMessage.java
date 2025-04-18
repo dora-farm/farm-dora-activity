@@ -12,7 +12,11 @@ public enum SuccessMessage {
     SEARCH_STATUSRATIO_SUCCESS("반품 및 교환율 조회에 성공하였습니다."),
     SEARCH_PRODUCTRATIO_SUCCESS("제품별 판매 비율 조회에 성공하였습니다."),
     SEARCH_TOTALSALES_SUCCESS("사이트 매출 조회에 성공하였습니다."),
-    SEARCH_TOTALUSERS_SUCCESS("사이트 가입자 수 조회에 성공하였습니다.");
+    SEARCH_TOTALUSERS_SUCCESS("사이트 가입자 수 조회에 성공하였습니다."),
+    SEARCH_USERINFO_SUCCESS("내 정보 조회에 성공하였습니다."),
+    SEARCH_ACTIVOTYINFO_SUCCESS("내 활동정보 조회에 성공하였습니다."),
+    SEARCH_ORDERSTATUS_SUCCESS("내 주문현황 조회에 성공하였습니다.");
+
 
 
     private final String message;

@@ -24,9 +24,9 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
         UserInfoDTO dto = UserInfoDTO.from(userInfo);
 
-        log.info("유저인포는!?" + dto.toString());
+        log.info("유저인포는!?" + dto);
 
-        return UserInfoDTO.from(userInfo);
+        return dto;
     }
 
 }
