@@ -23,9 +23,6 @@ public class UserDashboardController {
     @GetMapping("/info")
     public ResponseEntity<?> findUserInfo(@RequestParam Integer userId) {
         UserInfoDTO userInfoDTO = userDashboardService.findUserInfo(userId);
-
-        log.info("userInfoDTO: {}", userInfoDTO);
-
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_USERINFO_SUCCESS.getMessage(), userInfoDTO));

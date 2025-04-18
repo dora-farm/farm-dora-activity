@@ -21,12 +21,7 @@ public class UserDashboardServiceImpl implements UserDashboardService {
     @Transactional(readOnly = true)
     public UserInfoDTO findUserInfo(@Param("userId") Integer userId) {
         User userInfo = userDashboardRepository.findById(userId).orElse(null);
-
         UserInfoDTO dto = UserInfoDTO.from(userInfo);
-
-        log.info("유저인포는!?" + dto);
-
         return dto;
     }
-
 }
