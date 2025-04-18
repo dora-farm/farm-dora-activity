@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.user.service;
 
 import com.farmdora.farmdoraactivity.entity.User;
+import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO.*;
 import com.farmdora.farmdoraactivity.user.repository.UserDashboardRepository;
@@ -9,6 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -21,25 +26,40 @@ public class UserDashboardServiceImpl implements UserDashboardService {
     @Override
     @Transactional(readOnly = true)
     public UserDashboardDTO getDashboardInfo(@Param("userId") Integer userId) {
-        User userInfo = userDashboardRepository.findById(userId).orElse(null);
 
+        User userInfo = userDashboardRepository.findById(userId).orElse(null);
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfo);
-        log.info(userInfoDTO.toString());
 
         Long totalAmount = userDashboardRepository.sumTotalAmount(userId);
         Long reviewCount = userDashboardRepository.countReviewsByUserId(userId);
         Long inquiryCount = userDashboardRepository.countInquiriesByUserId(userId);
-
         ActivityInfoDTO activityInfoDTO = ActivityInfoDTO.builder()
                 .totalAmount(totalAmount != null ? totalAmount : 0L)
                 .reviewCount(reviewCount != null ? reviewCount : 0L)
                 .inquiryCount(inquiryCount != null ? inquiryCount : 0L)
                 .build();
-        log.info(activityInfoDTO.toString());
 
         return UserDashboardDTO.builder()
                 .userInfoDTO(userInfoDTO)
                 .activityInfoDTO(activityInfoDTO)
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderStatusDTO> getOrderStatusByUserId(@Param("userId") Integer userId) {
+
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.withDayOfMonth(1);
+        LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        List<OrderStatusDTO> dto = userDashboardRepository.findOrderStatusByUserId(userId, startDateTime, endDateTime);
+
+        log.info("dto: {}", dto);
+
+        return dto;
     }
 }
