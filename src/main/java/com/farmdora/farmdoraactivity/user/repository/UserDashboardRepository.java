@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,5 +33,19 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
             @Param("userId") Integer userId,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
+
+    @Query(value =
+            "SELECT s.sale_id, s.title, o.name, o.price, sf.save_file " +
+            "FROM `like` l " +
+            "JOIN sale s ON l.sale_id = s.sale_id " +
+            "JOIN `option` o ON s.sale_id = o.sale_id AND o.option_id = (" +
+                    "SELECT MIN(option_id) " +
+                    "FROM `option` " +
+                    "WHERE sale_id = s.sale_id) " +
+            "JOIN sale_file sf ON s.sale_id = sf.sale_id AND sf.is_main = 0 " +
+            "WHERE l.user_id = :userId",
+            nativeQuery = true)
+    List<Object[]> findWishlistByUserId(@Param("userId") Integer userId);
+
 
 }

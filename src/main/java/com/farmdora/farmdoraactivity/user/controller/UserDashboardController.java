@@ -3,6 +3,7 @@ package com.farmdora.farmdoraactivity.user.controller;
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
+import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
 import com.farmdora.farmdoraactivity.user.service.UserDashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_ORDERSTATUSINFO_SUCCESS;
-import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_USERDASHBOARDINFO_SUCCESS;
+import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 @RestController
 @RequestMapping("api/my/user/dashboard")
@@ -40,5 +40,14 @@ public class UserDashboardController {
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERSTATUSINFO_SUCCESS.getMessage(), orderStatusCounts));
+    }
+
+    @GetMapping("/preview")
+    public ResponseEntity<?> getWishlist(@RequestParam Integer userId) {
+
+        List<WishlistDTO> wishlists = userDashboardService.getWishlistByUserId(userId);
+        return ResponseEntity
+                .ok()
+                .body(new HttpResponse(HttpStatus.OK, SEARCH_WISHLIST_SUCCESS.getMessage(), wishlists));
     }
 }

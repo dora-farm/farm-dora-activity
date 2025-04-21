@@ -4,6 +4,7 @@ import com.farmdora.farmdoraactivity.entity.User;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO.*;
+import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
 import com.farmdora.farmdoraactivity.user.repository.UserDashboardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -56,10 +58,18 @@ public class UserDashboardServiceImpl implements UserDashboardService {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
 
-        List<OrderStatusDTO> dto = userDashboardRepository.findOrderStatusByUserId(userId, startDateTime, endDateTime);
+        return userDashboardRepository.findOrderStatusByUserId(userId, startDateTime, endDateTime);
+    }
 
-        log.info("dto: {}", dto);
+    @Override
+    @Transactional(readOnly = true)
+    public List<WishlistDTO> getWishlistByUserId(@Param("userId") Integer userId) {
 
-        return dto;
+        List<Object[]> results = userDashboardRepository.findWishlistByUserId(userId);
+        log.info("results: {}", results);
+
+        return results.stream()
+                .map(WishlistDTO::from)
+                .collect(Collectors.toList());
     }
 }
