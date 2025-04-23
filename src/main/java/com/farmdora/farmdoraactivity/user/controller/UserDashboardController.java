@@ -3,6 +3,7 @@ package com.farmdora.farmdoraactivity.user.controller;
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
+import com.farmdora.farmdoraactivity.user.dto.WishPreviewDTO;
 import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
 import com.farmdora.farmdoraactivity.user.service.UserDashboardService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,15 @@ public class UserDashboardController {
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERSTATUSINFO_SUCCESS.getMessage(), orderStatusCounts));
+    }
+
+    @GetMapping("/wishpreview")
+    public ResponseEntity<?> getWishPreviewInfo(@RequestParam Integer userId) {
+
+        List<WishPreviewDTO> wishPreviews = userDashboardService.getWishPreviewByUserId(userId);
+        return ResponseEntity
+                .ok()
+                .body(new HttpResponse(HttpStatus.OK, SEARCH_WISHLIST_SUCCESS.getMessage(), wishPreviews));
     }
 
     @GetMapping("/wishlist")

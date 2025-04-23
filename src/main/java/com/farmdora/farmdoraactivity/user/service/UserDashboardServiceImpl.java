@@ -5,10 +5,12 @@ import com.farmdora.farmdoraactivity.entity.User;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO.*;
+import com.farmdora.farmdoraactivity.user.dto.WishPreviewDTO;
 import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
 import com.farmdora.farmdoraactivity.user.repository.UserDashboardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +61,19 @@ public class UserDashboardServiceImpl implements UserDashboardService {
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
 
         return userDashboardRepository.findOrderStatusByUserId(userId, startDateTime, endDateTime);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<WishPreviewDTO> getWishPreviewByUserId(Integer userId) {
+
+        PageRequest pageRequest = PageRequest.of(0, 4);
+        List<Object[]> results = userDashboardRepository.findWishPreviewByUserId(userId, pageRequest);
+        log.info("마이페이지 찜리스트:  {}", results);
+
+        return results.stream()
+                .map(WishPreviewDTO::from)
+                .collect(Collectors.toList());
     }
 
     @Override

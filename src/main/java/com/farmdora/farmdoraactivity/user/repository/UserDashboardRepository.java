@@ -2,6 +2,7 @@ package com.farmdora.farmdoraactivity.user.repository;
 
 import com.farmdora.farmdoraactivity.entity.User;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,6 +35,16 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
+    @Query("SELECT s.id, s.title, o.name, o.price, sf.saveFile " +
+            "FROM Like l " +
+            "JOIN l.sale s " +
+            "JOIN Option o ON s.id = o.sale.id AND o.id = (" +
+                "SELECT MIN(id) " +
+                "FROM Option WHERE sale.id = s.id) " +
+            "JOIN SaleFile sf ON s.id = sf.sale.id AND sf.isMain = false " +
+            "WHERE l.user.userId = :userId")
+    List<Object[]> findWishPreviewByUserId(@Param("userId") Integer userId, Pageable pageable);
+
     @Query("SELECT s.id, s.title, o.name, o.price, sf.saveFile, " +
             "ROUND(AVG(re.score), 1), COUNT(DISTINCT re.id) " +
             "FROM Like l " +
@@ -45,6 +56,4 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
             "AND o.id = (SELECT MIN(o2.id) FROM Option o2 WHERE o2.sale = s) " +
             "GROUP BY s.id, s.title, o.name, o.price, sf.saveFile")
     List<Object[]> findWishlistByUserId(@Param("userId") Integer userId);
-
-
 }
