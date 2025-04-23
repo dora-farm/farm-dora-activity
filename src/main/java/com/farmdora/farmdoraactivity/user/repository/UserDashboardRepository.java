@@ -45,7 +45,7 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
             "WHERE l.user.userId = :userId")
     List<Object[]> findWishPreviewByUserId(@Param("userId") Integer userId, Pageable pageable);
 
-    @Query("SELECT s.id, s.title, o.name, o.price, sf.saveFile, " +
+    @Query("SELECT l.id, s.id, s.title, o.name, o.price, sf.saveFile, " +
             "ROUND(AVG(re.score), 1), COUNT(DISTINCT re.id) " +
             "FROM Like l " +
             "JOIN l.sale s ON l.sale = s " +
@@ -54,6 +54,9 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
             "LEFT JOIN Review re ON re.sale = s " +
             "WHERE l.user.userId = :userId " +
             "AND o.id = (SELECT MIN(o2.id) FROM Option o2 WHERE o2.sale = s) " +
-            "GROUP BY s.id, s.title, o.name, o.price, sf.saveFile")
+            "GROUP BY s.id, s.title, o.name, o.price, sf.saveFile " +
+            "ORDER BY l.id DESC")
     List<Object[]> findWishlistByUserId(@Param("userId") Integer userId);
+
+
 }

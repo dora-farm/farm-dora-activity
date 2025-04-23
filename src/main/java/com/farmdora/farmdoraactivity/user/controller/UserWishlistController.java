@@ -20,7 +20,7 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARC
 @Slf4j
 public class UserWishlistController {
 
-    private UserDashboardService userDashboardService;
+    private final UserDashboardService userDashboardService;
 
     @GetMapping("/list")
     public ResponseEntity<?> getWishlist(@RequestParam Integer userId) {
@@ -31,9 +31,9 @@ public class UserWishlistController {
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_WISHLIST_SUCCESS.getMessage(), wishlists));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteWishlist(@RequestParam Integer userId) {
-
-        
-    }
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<?> deleteWishlist(@RequestParam Integer userId) {
+//
+//
+//    }
 }
