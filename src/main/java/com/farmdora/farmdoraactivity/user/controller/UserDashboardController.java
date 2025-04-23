@@ -51,13 +51,4 @@ public class UserDashboardController {
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_WISHLIST_SUCCESS.getMessage(), wishPreviews));
     }
-
-    @GetMapping("/wishlist")
-    public ResponseEntity<?> getWishlist(@RequestParam Integer userId) {
-
-        List<WishlistDTO> wishlists = userDashboardService.getWishlistByUserId(userId);
-        return ResponseEntity
-                .ok()
-                .body(new HttpResponse(HttpStatus.OK, SEARCH_WISHLIST_SUCCESS.getMessage(), wishlists));
-    }
 }
