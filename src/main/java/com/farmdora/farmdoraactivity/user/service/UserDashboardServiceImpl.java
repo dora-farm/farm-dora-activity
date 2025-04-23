@@ -8,7 +8,6 @@ import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
 import com.farmdora.farmdoraactivity.user.repository.UserDashboardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,7 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDashboardDTO getDashboardInfo(@Param("userId") Integer userId) {
+    public UserDashboardDTO getDashboardInfo(Integer userId) {
 
         User userInfo = userDashboardRepository.findById(userId).orElse(null);
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfo);
@@ -49,7 +48,7 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderStatusDTO> getOrderStatusByUserId(@Param("userId") Integer userId) {
+    public List<OrderStatusDTO> getOrderStatusByUserId(Integer userId) {
 
         LocalDate now = LocalDate.now();
         LocalDate startDate = now.withDayOfMonth(1);
@@ -63,7 +62,7 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<WishlistDTO> getWishlistByUserId(@Param("userId") Integer userId) {
+    public List<WishlistDTO> getWishlistByUserId(Integer userId) {
 
         List<Object[]> results = userDashboardRepository.findWishlistByUserId(userId);
         log.info("results: {}", results);
