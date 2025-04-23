@@ -1,18 +1,10 @@
 package com.farmdora.farmdoraactivity.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @ToString
 @NoArgsConstructor
@@ -21,6 +13,7 @@ import lombok.ToString;
 public class Pay extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pay_id")
     private Integer id;
 
@@ -32,19 +25,17 @@ public class Pay extends BaseTimeEntity {
     @JoinColumn(name = "status_id")
     private PayStatus status;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String method;
 
-    @Column(nullable = false)
     private Integer amount;
 
-    @Column(nullable = false)
     private String payNum;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String card;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String cardNumber;
 
     @Column(length = 20)
