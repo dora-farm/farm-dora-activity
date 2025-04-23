@@ -1,5 +1,6 @@
 package com.farmdora.farmdoraactivity.user.service;
 
+import com.farmdora.farmdoraactivity.common.exception.ResourceNotFoundException;
 import com.farmdora.farmdoraactivity.entity.User;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
@@ -28,7 +29,7 @@ public class UserDashboardServiceImpl implements UserDashboardService {
     @Transactional(readOnly = true)
     public UserDashboardDTO getDashboardInfo(Integer userId) {
 
-        User userInfo = userDashboardRepository.findById(userId).orElse(null);
+        User userInfo = userDashboardRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", userId));
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfo);
 
         Long totalAmount = userDashboardRepository.sumTotalAmount(userId);
