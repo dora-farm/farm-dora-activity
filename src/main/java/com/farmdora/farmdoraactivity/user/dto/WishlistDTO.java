@@ -26,7 +26,7 @@ public class WishlistDTO {
                 .option((String) obj[2])
                 .price((Integer) obj[3])
                 .saveFile((String) obj[4])
-                .score(obj[5] != null ? ((BigDecimal) obj[5]).doubleValue() : null)
+                .score((Double) obj[5])
                 .reviewCount((Long) obj[6])
                 .build();
     }

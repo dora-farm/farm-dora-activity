@@ -11,6 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "`like`")
 public class Like {
 
     @Id

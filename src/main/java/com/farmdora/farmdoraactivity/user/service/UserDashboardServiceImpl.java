@@ -66,7 +66,7 @@ public class UserDashboardServiceImpl implements UserDashboardService {
     public List<WishlistDTO> getWishlistByUserId(Integer userId) {
 
         List<Object[]> results = userDashboardRepository.findWishlistByUserId(userId);
-        log.info("results: {}", results);
+        log.info("찜리스트: {}", results);
 
         return results.stream()
                 .map(WishlistDTO::from)
