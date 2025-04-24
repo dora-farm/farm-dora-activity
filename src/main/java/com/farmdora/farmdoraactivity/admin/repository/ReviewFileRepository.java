@@ -8,4 +8,6 @@ import java.util.List;
 public interface ReviewFileRepository extends JpaRepository<ReviewFile, Integer> {
 
     List<ReviewFile> findByReviewId(Integer reviewId);
+
+    void deleteByReviewId(Integer reviewId);
 }

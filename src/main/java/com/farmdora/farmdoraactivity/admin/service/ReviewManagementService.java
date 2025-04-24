@@ -1,26 +1,30 @@
 package com.farmdora.farmdoraactivity.admin.service;
 
 import com.farmdora.farmdoraactivity.admin.dto.ReviewDTO.*;
-import com.farmdora.farmdoraactivity.admin.dto.SearchDTO;
+import com.farmdora.farmdoraactivity.admin.dto.SortType;
 import com.farmdora.farmdoraactivity.admin.repository.OrderOptionRepository;
 import com.farmdora.farmdoraactivity.admin.repository.ReviewFileRepository;
 import com.farmdora.farmdoraactivity.admin.repository.ReviewManagementRepository;
+import com.farmdora.farmdoraactivity.common.exception.ResourceAlreadyExistsException;
 import com.farmdora.farmdoraactivity.common.exception.ResourceNotFoundException;
 import com.farmdora.farmdoraactivity.common.response.PageResponseDto;
 import com.farmdora.farmdoraactivity.entity.OrderOption;
 import com.farmdora.farmdoraactivity.entity.Review;
 import com.farmdora.farmdoraactivity.entity.ReviewFile;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewManagementService {
 
     private final ReviewManagementRepository reviewManagementRepository;
@@ -29,32 +33,18 @@ public class ReviewManagementService {
     private final NcpImageService ncpImageService;
 
     @Transactional(readOnly = true)
-    public PageResponseDto<ReviewListResponse> getAllReviews(SearchDTO searchDTO, Pageable pageable) {
-        Page<Review> reviewPage = reviewManagementRepository.findAllByCreatedDateBetweenOrderByCreatedDateDesc(
-                searchDTO.getStartDate(),
-                searchDTO.getEndDate(),
-                pageable);
+    public PageResponseDto<ReviewListResponse> getAllReviews(SortType sortType, int page) {
+        Pageable pageable = null;
+        if (sortType.equals(SortType.LATEST)) {
+            pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdDate"));
+        } else {
+            pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "createdDate"));
+        }
 
-        List<ReviewListResponse> reviewListResponses = reviewPage.getContent().stream()
-                .collect(Collectors.groupingBy(
-                        review -> review.getOrder().getId(),
-                        Collectors.groupingBy(review -> review.getSale().getId())
-                ))
-                .values().stream()
-                .flatMap(orderGroup -> orderGroup.values().stream())
-                .map(saleReviews -> {
-                    Review review = saleReviews.get(0);
-                    List<ReviewFile> reviewFiles = reviewFileRepository.findByReviewId(review.getId());
-                    List<OrderOption> orderOptions = orderOptionRepository.findByOrderId(review.getOrder().getId());
+        Page<Review> reviewPage = reviewManagementRepository.findAll(pageable);
 
-                    List<OrderOptionInfo> filteredOrderOptions = orderOptions.stream()
-                            .filter(option -> option.getOption().getSale().getId().equals(review.getSale().getId()))
-                            .map(OrderOptionInfo::fromEntity)
-                            .toList();
-
-                    return ReviewListResponse.fromEntity(review, reviewFiles, filteredOrderOptions, ncpImageService);
-                })
-                .collect(Collectors.toList());
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  List<ReviewListResponse> reviewListResponses = reviewPage.getContent().stream()
+                        .map(ReviewListResponse::fromEntity).toList();
 
         return new PageResponseDto<>(reviewListResponses, reviewPage);
     }
@@ -74,14 +64,16 @@ public class ReviewManagementService {
     @Transactional
     public DeleteReviewResponse deleteReview(Integer reviewId) {
         try {
-            Review review = reviewManagementRepository.findById(reviewId)
-                    .orElseThrow(() -> new ResourceNotFoundException("review", reviewId));
-
             List<ReviewFile> reviewFiles = reviewFileRepository.findByReviewId(reviewId);
 
             for(ReviewFile file : reviewFiles) {
                 ncpImageService.deleteObjectToNCP(file.getSaveFile());
             }
+
+            reviewFileRepository.deleteByReviewId(reviewId);
+
+            Review review = reviewManagementRepository.findById(reviewId)
+                    .orElseThrow(() -> new ResourceAlreadyExistsException("review", reviewId));
 
             reviewManagementRepository.delete(review);
 

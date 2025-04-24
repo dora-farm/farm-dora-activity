@@ -1,15 +1,14 @@
 package com.farmdora.farmdoraactivity.admin.controller;
 
 import com.farmdora.farmdoraactivity.admin.dto.ReviewDTO.*;
-import com.farmdora.farmdoraactivity.admin.dto.SearchDTO;
+import com.farmdora.farmdoraactivity.admin.dto.SortType;
 import com.farmdora.farmdoraactivity.admin.service.ReviewManagementService;
 import com.farmdora.farmdoraactivity.common.response.ErrorMessage;
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.common.response.PageResponseDto;
 import com.farmdora.farmdoraactivity.common.response.SuccessMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/review")
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewManagementController {
 
     private final ReviewManagementService reviewManagementService;
 
     @GetMapping("/allreviews")
-    public ResponseEntity<?> getAllReviews(
-            SearchDTO searchDTO,
-            @PageableDefault(size = 5)Pageable pageable) {
-
-        PageResponseDto<ReviewListResponse> pageResponse = reviewManagementService.getAllReviews(searchDTO, pageable);
+    public ResponseEntity<?> getAllReviews(@RequestParam SortType sortType, @RequestParam int page) {
+//            @PageableDefault(size = 10)Pageable pageable) {
+        PageResponseDto<ReviewListResponse> pageResponse = reviewManagementService.getAllReviews(sortType, page);
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, SuccessMessage.SEARCH_REVIEW_ALL_SUCCESS.getMessage(), pageResponse));
     }

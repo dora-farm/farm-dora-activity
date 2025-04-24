@@ -19,36 +19,20 @@ public class ReviewDTO {
         private Integer reviewId;
         private Integer saleId;
         private String productName;
-        private String productImage;
         private String content;
         private byte score;
         private LocalDateTime createdDate;
         private String userName;
 
         // 목록 조회용 간략 정보로 변환
-        public static ReviewListResponse fromEntity(
-                Review review,
-                List<ReviewFile> reviewFiles,
-                List<OrderOptionInfo> orderOptions,
-                NcpImageService ncpImageService) {
+        public static ReviewListResponse fromEntity(Review review) {
             Sale sale = review.getSale();
             User user = review.getOrder().getUser();
-
-            // 파일명을 전체 URL로 변환
-            List<String> imageUrls = reviewFiles.stream()
-                    .map(file -> ncpImageService.getObjectUrl(file.getSaveFile()))
-                    .collect(Collectors.toList());
-
-            // 리뷰의 saleId와 동일한 옵션만 필터링
-            List<OrderOptionInfo> filteredOrderOptions = orderOptions.stream()
-                    .filter(option -> option.getSaleId().equals(sale.getId()))
-                    .collect(Collectors.toList());
 
             return ReviewListResponse.builder()
                     .reviewId(review.getId())
                     .saleId(sale.getId())
                     .productName(sale.getTitle())
-                    .productImage(ncpImageService.getObjectUrl(sale.getSeller().getSaveFile()))
                     .content(review.getContent().length() > 50 ?
                             review.getContent().substring(0, 50) + "..." : review.getContent())
                     .score(review.getScore())
