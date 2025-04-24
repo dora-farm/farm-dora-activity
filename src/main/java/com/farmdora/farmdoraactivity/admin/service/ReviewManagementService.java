@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.admin.service;
 
 import com.farmdora.farmdoraactivity.admin.dto.ReviewDTO.*;
+import com.farmdora.farmdoraactivity.admin.dto.SearchType;
 import com.farmdora.farmdoraactivity.admin.dto.SortType;
 import com.farmdora.farmdoraactivity.admin.repository.OrderOptionRepository;
 import com.farmdora.farmdoraactivity.admin.repository.ReviewFileRepository;
@@ -33,17 +34,32 @@ public class ReviewManagementService {
     private final NcpImageService ncpImageService;
 
     @Transactional(readOnly = true)
-    public PageResponseDto<ReviewListResponse> getAllReviews(SortType sortType, int page) {
+    public PageResponseDto<ReviewListResponse> getAllReviews(SortType sortType, int page, SearchType searchType, String keyword) {
         Pageable pageable = null;
+
         if (sortType.equals(SortType.LATEST)) {
             pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdDate"));
         } else {
             pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "createdDate"));
         }
 
-        Page<Review> reviewPage = reviewManagementRepository.findAll(pageable);
+        Page<Review> reviewPage;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  List<ReviewListResponse> reviewListResponses = reviewPage.getContent().stream()
+        // 검색 조건이 있는 경우
+        if(searchType != null && keyword != null && !keyword.trim().isEmpty()) {
+            switch (searchType) {
+                case PRODUCT_NAME ->
+                    reviewPage = reviewManagementRepository.findByProductNameContaining(keyword, pageable);
+                case WRITER ->
+                    reviewPage = reviewManagementRepository.findByUserNameContaining(keyword, pageable);
+                default ->
+                    reviewPage = reviewManagementRepository.findAll(pageable);
+            }
+        } else {
+            reviewPage = reviewManagementRepository.findAll(pageable);
+        }
+
+        List<ReviewListResponse> reviewListResponses = reviewPage.getContent().stream()
                         .map(ReviewListResponse::fromEntity).toList();
 
         return new PageResponseDto<>(reviewListResponses, reviewPage);

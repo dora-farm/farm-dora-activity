@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.admin.controller;
 
 import com.farmdora.farmdoraactivity.admin.dto.ReviewDTO.*;
+import com.farmdora.farmdoraactivity.admin.dto.SearchType;
 import com.farmdora.farmdoraactivity.admin.dto.SortType;
 import com.farmdora.farmdoraactivity.admin.service.ReviewManagementService;
 import com.farmdora.farmdoraactivity.common.response.ErrorMessage;
@@ -22,9 +23,14 @@ public class ReviewManagementController {
     private final ReviewManagementService reviewManagementService;
 
     @GetMapping("/allreviews")
-    public ResponseEntity<?> getAllReviews(@RequestParam SortType sortType, @RequestParam int page) {
-//            @PageableDefault(size = 10)Pageable pageable) {
-        PageResponseDto<ReviewListResponse> pageResponse = reviewManagementService.getAllReviews(sortType, page);
+    public ResponseEntity<?> getAllReviews(
+            @RequestParam SortType sortType,
+            @RequestParam int page,
+            @RequestParam(value = "searchType", required = false) SearchType searchType,
+            @RequestParam(value = "keyword", required = false) String keyword) {
+
+        PageResponseDto<ReviewListResponse> pageResponse = reviewManagementService.getAllReviews(sortType, page, searchType, keyword);
+
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, SuccessMessage.SEARCH_REVIEW_ALL_SUCCESS.getMessage(), pageResponse));
     }
