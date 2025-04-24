@@ -42,6 +42,7 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
                 "SELECT MIN(id) " +
                 "FROM Option WHERE sale.id = s.id) " +
             "JOIN SaleFile sf ON s.id = sf.sale.id AND sf.isMain = false " +
-            "WHERE l.user.userId = :userId")
+            "WHERE l.user.userId = :userId " +
+            "ORDER BY l.id DESC ")
     List<Object[]> findWishPreviewByUserId(@Param("userId") Integer userId, Pageable pageable);
 }
