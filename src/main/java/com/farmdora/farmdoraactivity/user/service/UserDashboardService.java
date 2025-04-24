@@ -15,5 +15,4 @@ public interface UserDashboardService {
 
     List<WishPreviewDTO> getWishPreviewByUserId(Integer userId);
 
-    List<WishlistDTO> getWishlistByUserId(Integer userId);
 }

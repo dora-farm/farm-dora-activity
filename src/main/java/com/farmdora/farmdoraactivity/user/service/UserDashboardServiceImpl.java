@@ -6,7 +6,6 @@ import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO.*;
 import com.farmdora.farmdoraactivity.user.dto.WishPreviewDTO;
-import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
 import com.farmdora.farmdoraactivity.user.repository.UserDashboardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,18 +72,6 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
         return results.stream()
                 .map(WishPreviewDTO::from)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<WishlistDTO> getWishlistByUserId(Integer userId) {
-
-        List<Object[]> results = userDashboardRepository.findWishlistByUserId(userId);
-        log.info("찜리스트: {}", results);
-
-        return results.stream()
-                .map(WishlistDTO::from)
                 .collect(Collectors.toList());
     }
 }

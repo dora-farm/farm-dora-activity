@@ -3,6 +3,7 @@ package com.farmdora.farmdoraactivity.user.controller;
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
 import com.farmdora.farmdoraactivity.user.service.UserDashboardService;
+import com.farmdora.farmdoraactivity.user.service.UserWishlistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_DELETEWISH_SUCCESS;
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_WISHLIST_SUCCESS;
 
 @RestController
@@ -20,20 +22,24 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARC
 @Slf4j
 public class UserWishlistController {
 
-    private final UserDashboardService userDashboardService;
+    private final UserWishlistService userWishlistService;
 
     @GetMapping("/list")
     public ResponseEntity<?> getWishlist(@RequestParam Integer userId) {
 
-        List<WishlistDTO> wishlists = userDashboardService.getWishlistByUserId(userId);
+        List<WishlistDTO> wishlists = userWishlistService.getWishlistByUserId(userId);
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_WISHLIST_SUCCESS.getMessage(), wishlists));
     }
 
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<?> deleteWishlist(@RequestParam Integer userId) {
-//
-//
-//    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteSelectedWishlist(@RequestBody List<Integer> likeIds) {
+
+        userWishlistService.deleteSelectedWishlist(likeIds);
+
+        return ResponseEntity
+                .ok()
+                .body(new HttpResponse(HttpStatus.OK, SEARCH_DELETEWISH_SUCCESS.getMessage(), null));
+    }
 }
