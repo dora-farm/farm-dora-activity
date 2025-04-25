@@ -1,7 +1,7 @@
 package com.farmdora.farmdoraactivity.admin.dto;
 
+import com.farmdora.farmdoraactivity.admin.service.NCPObjectStorageService;
 import com.farmdora.farmdoraactivity.entity.*;
-import com.farmdora.farmdoraactivity.admin.service.NcpImageService;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -61,12 +61,12 @@ public class ReviewDTO {
 
         // 상세 조회용 상세 정보로 변환
         public static ReviewDetailResponse fromEntity(Review review, List<ReviewFile> reviewFiles,
-                                                      List<OrderOption> orderOptions, NcpImageService ncpImageService) {
+                                                      List<OrderOption> orderOptions, NCPObjectStorageService ncpImageService) {
             Sale sale = review.getSale();
             User user = review.getOrder().getUser();
             // 파일명을 전체 URL로 변환
             List<String> imageUrls = reviewFiles.stream()
-                    .map(file -> ncpImageService.getObjectUrl(file.getSaveFile()))
+                    .map(file -> ncpImageService.getObjectStorageImageUrl(file.getSaveFile()))
                     .collect(Collectors.toList());
 
             // 리뷰의 saleId와 동일한 옵션만 필터링하여 변환
@@ -79,7 +79,7 @@ public class ReviewDTO {
                     .reviewId(review.getId())
                     .saleId(sale.getId())
                     .productName(sale.getTitle())
-                    .productImage(ncpImageService.getObjectUrl(sale.getSeller().getSaveFile()))
+                    .productImage(ncpImageService.getObjectStorageImageUrl(sale.getSeller().getSaveFile()))
                     .content(review.getContent())
                     .score(review.getScore())
                     .createdDate(review.getCreatedDate())

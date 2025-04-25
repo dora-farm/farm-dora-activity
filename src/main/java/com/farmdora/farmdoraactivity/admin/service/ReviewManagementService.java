@@ -31,7 +31,7 @@ public class ReviewManagementService {
     private final ReviewManagementRepository reviewManagementRepository;
     private final ReviewFileRepository reviewFileRepository;
     private final OrderOptionRepository orderOptionRepository;
-    private final NcpImageService ncpImageService;
+    private final NCPObjectStorageService ncpImageService;
 
     @Transactional(readOnly = true)
     public PageResponseDto<ReviewListResponse> getAllReviews(SortType sortType, int page, SearchType searchType, String keyword) {
@@ -83,7 +83,7 @@ public class ReviewManagementService {
             List<ReviewFile> reviewFiles = reviewFileRepository.findByReviewId(reviewId);
 
             for(ReviewFile file : reviewFiles) {
-                ncpImageService.deleteObjectToNCP(file.getSaveFile());
+                ncpImageService.delete(file.getSaveFile());
             }
 
             reviewFileRepository.deleteByReviewId(reviewId);
