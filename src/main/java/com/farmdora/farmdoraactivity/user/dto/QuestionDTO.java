@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 public class QuestionDTO {
     private int id;
     private String title;
+    private String content;
+    private String answer;
     private LocalDateTime createDate;
     private boolean isProcess;
 
@@ -21,6 +23,8 @@ public class QuestionDTO {
         return QuestionDTO.builder()
                 .id(question.getId())
                 .title(question.getTitle())
+                .content(question.getContent())
+                .answer(question.getAnswer())
                 .createDate(question.getCreatedDate())
                 .isProcess(question.isProcess())
                 .build();
