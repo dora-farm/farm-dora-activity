@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +19,15 @@ public class UserQuestionService {
     private final UserQuestionRepository userQuestionRepository;
 
     public List<QuestionDTO> getQuestionByUserId(Integer userId) {
-        List<Question> questions = userQuestionRepository.findAllByUser_UserId(userId);
+        List<Question> questions = userQuestionRepository.findAllByUser_UserIdOrderByCreatedDateDesc(userId);
+
+        return questions.stream()
+                .map(QuestionDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<QuestionDTO> getQuestionByPeriod(Integer userId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Question> questions = userQuestionRepository.findQuestionByPeriod(userId, startDate, endDate);
 
         return questions.stream()
                 .map(QuestionDTO::from)
