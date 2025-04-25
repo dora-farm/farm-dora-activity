@@ -21,6 +21,4 @@ public interface UserQuestionRepository extends JpaRepository<Question, Integer>
             @Param("userId") Integer userId,
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
-
-
 }
