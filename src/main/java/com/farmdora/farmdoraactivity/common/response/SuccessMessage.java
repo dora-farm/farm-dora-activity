@@ -16,8 +16,7 @@ public enum SuccessMessage {
     SEARCH_USERDASHBOARDINFO_SUCCESS("내 정보 조회에 성공하였습니다."),
     SEARCH_ORDERSTATUSINFO_SUCCESS("주문 현황 조회에 성공하였습니다."),
     SEARCH_WISHLIST_SUCCESS("찜 리스트 조회에 성공하였습니다."),
-    SEARCH_QUESTIONINFO_SUCCESS("내 문의 내역 전체 조회에 성공하였습니다."),
-    SEARCH_QUESTIONPERIOD_SUCCESS("내 문의 내역 기간 조회에 성공하였습니다.");
+    SEARCH_QUESTIONINFO_SUCCESS("내 문의 내역 조회에 성공하였습니다.");
 
 
 
