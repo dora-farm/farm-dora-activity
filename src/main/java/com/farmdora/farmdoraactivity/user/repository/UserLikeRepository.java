@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserWishlistRepository extends JpaRepository<Like, Integer> {
+public interface UserLikeRepository extends JpaRepository<Like, Integer> {
 
     @Query("SELECT l.id, o.id, s.id, s.title, o.name, o.price, sf.saveFile, " +
             "ROUND(AVG(re.score), 1), COUNT(DISTINCT re.id) " +
@@ -22,5 +22,5 @@ public interface UserWishlistRepository extends JpaRepository<Like, Integer> {
             "AND o.id = (SELECT MIN(o2.id) FROM Option o2 WHERE o2.sale = s) " +
             "GROUP BY s.id, s.title, o.name, o.price, sf.saveFile, o.id, l.id    " +
             "ORDER BY l.id DESC")
-    List<Object[]> findWishlistByUserId(@Param("userId") Integer userId);
+    List<Object[]> findLikeByUserId(@Param("userId") Integer userId);
 }

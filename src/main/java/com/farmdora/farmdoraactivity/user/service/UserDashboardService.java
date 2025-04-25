@@ -2,8 +2,7 @@ package com.farmdora.farmdoraactivity.user.service;
 
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
-import com.farmdora.farmdoraactivity.user.dto.WishPreviewDTO;
-import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
+import com.farmdora.farmdoraactivity.user.dto.LikePreviewDTO;
 
 import java.util.List;
 
@@ -13,6 +12,6 @@ public interface UserDashboardService {
 
     List<OrderStatusDTO> getOrderStatusByUserId(Integer userId);
 
-    List<WishPreviewDTO> getWishPreviewByUserId(Integer userId);
+    List<LikePreviewDTO> getWishPreviewByUserId(Integer userId);
 
 }
