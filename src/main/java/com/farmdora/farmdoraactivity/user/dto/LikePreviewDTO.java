@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class WishPreviewDTO {
+public class LikePreviewDTO {
 
     private int saleId;
     private String title;
@@ -16,8 +16,8 @@ public class WishPreviewDTO {
     private Integer price;
     private String saveFile;
 
-    public static WishPreviewDTO from(Object[] obj) {
-        return WishPreviewDTO.builder()
+    public static LikePreviewDTO from(Object[] obj) {
+        return LikePreviewDTO.builder()
                 .saleId((Integer) obj[0])
                 .title((String) obj[1])
                 .option((String) obj[2])

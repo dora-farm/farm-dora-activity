@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class WishlistDTO {
+public class LikeDTO {
     private int likeId;
     private int optionId;
     private int saleId;
@@ -20,8 +20,8 @@ public class WishlistDTO {
     private Double score;
     private Long reviewCount;
 
-    public static WishlistDTO from(Object[] obj) {
-        return WishlistDTO.builder()
+    public static LikeDTO from(Object[] obj) {
+        return LikeDTO.builder()
                 .likeId((Integer) obj[0])
                 .optionId((Integer) obj[1])
                 .saleId((Integer) obj[2])
