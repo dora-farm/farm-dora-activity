@@ -1,6 +1,5 @@
 package com.farmdora.farmdoraactivity.user.dto;
 
-import com.farmdora.farmdoraactivity.entity.BaseTimeEntity;
 import com.farmdora.farmdoraactivity.entity.Question;
 import lombok.*;
 
