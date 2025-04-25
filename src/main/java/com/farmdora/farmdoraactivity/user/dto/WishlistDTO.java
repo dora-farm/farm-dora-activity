@@ -2,7 +2,6 @@ package com.farmdora.farmdoraactivity.user.dto;
 
 import lombok.*;
 
-import java.math.BigDecimal;
 
 @Getter
 @Setter

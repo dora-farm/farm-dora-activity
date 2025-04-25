@@ -2,7 +2,6 @@ package com.farmdora.farmdoraactivity.user.controller;
 
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
-import com.farmdora.farmdoraactivity.user.service.UserDashboardService;
 import com.farmdora.farmdoraactivity.user.service.UserWishlistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
