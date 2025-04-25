@@ -27,6 +27,5 @@ public class UserQuestionController {
         List<QuestionDTO> questions = userQuestionService.getQuestionByUserId(userId);
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_QUESTIONINFO_SUCCESS.getMessage(), questions));
-
     }
 }
