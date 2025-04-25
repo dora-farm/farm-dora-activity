@@ -8,18 +8,19 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class WishlistDTO {
+public class LikePreviewDTO {
+
     private int saleId;
     private String title;
-    private String name;
+    private String option;
     private Integer price;
     private String saveFile;
 
-    public static WishlistDTO from(Object[] obj) {
-        return WishlistDTO.builder()
+    public static LikePreviewDTO from(Object[] obj) {
+        return LikePreviewDTO.builder()
                 .saleId((Integer) obj[0])
                 .title((String) obj[1])
-                .name((String) obj[2])
+                .option((String) obj[2])
                 .price((Integer) obj[3])
                 .saveFile((String) obj[4])
                 .build();
