@@ -3,7 +3,7 @@ package com.farmdora.farmdoraactivity.user.controller;
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
-import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
+import com.farmdora.farmdoraactivity.user.dto.LikePreviewDTO;
 import com.farmdora.farmdoraactivity.user.service.UserDashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +42,12 @@ public class UserDashboardController {
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERSTATUSINFO_SUCCESS.getMessage(), orderStatusCounts));
     }
 
-    @GetMapping("/preview")
-    public ResponseEntity<?> getWishlist(@RequestParam Integer userId) {
+    @GetMapping("/likepreview")
+    public ResponseEntity<?> getWishPreviewInfo(@RequestParam Integer userId) {
 
-        List<WishlistDTO> wishlists = userDashboardService.getWishlistByUserId(userId);
+        List<LikePreviewDTO> likePreviews = userDashboardService.getWishPreviewByUserId(userId);
         return ResponseEntity
                 .ok()
-                .body(new HttpResponse(HttpStatus.OK, SEARCH_WISHLIST_SUCCESS.getMessage(), wishlists));
+                .body(new HttpResponse(HttpStatus.OK, SEARCH_LIKE_SUCCESS.getMessage(), likePreviews));
     }
 }
