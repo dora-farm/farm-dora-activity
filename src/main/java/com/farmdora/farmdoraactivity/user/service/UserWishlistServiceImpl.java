@@ -31,6 +31,7 @@ public class UserWishlistServiceImpl implements UserWishlistService {
     }
 
     @Override
+    @Transactional
     public void deleteSelectedWishlist(List<Integer> likeIds) {
         userWishlistRepository.deleteAllById(likeIds);
     }

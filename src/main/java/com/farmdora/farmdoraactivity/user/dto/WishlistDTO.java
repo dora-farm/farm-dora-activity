@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class WishlistDTO {
     private int likeId;
+    private int optionId;
     private int saleId;
     private String title;
     private String option;
@@ -23,13 +24,14 @@ public class WishlistDTO {
     public static WishlistDTO from(Object[] obj) {
         return WishlistDTO.builder()
                 .likeId((Integer) obj[0])
-                .saleId((Integer) obj[1])
-                .title((String) obj[2])
-                .option((String) obj[3])
-                .price((Integer) obj[4])
-                .saveFile((String) obj[5])
-                .score((Double) obj[6])
-                .reviewCount((Long) obj[7])
+                .optionId((Integer) obj[1])
+                .saleId((Integer) obj[2])
+                .title((String) obj[3])
+                .option((String) obj[4])
+                .price((Integer) obj[5])
+                .saveFile((String) obj[6])
+                .score((Double) obj[7])
+                .reviewCount((Long) obj[8])
                 .build();
     }
 }
