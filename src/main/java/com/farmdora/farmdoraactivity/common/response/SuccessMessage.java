@@ -17,7 +17,8 @@ public enum SuccessMessage {
     SEARCH_ORDERSTATUSINFO_SUCCESS("주문 현황 조회에 성공하였습니다."),
     SEARCH_LIKE_SUCCESS("찜 리스트 조회에 성공하였습니다."),
     SEARCH_DELETELIKE_SUCCESS("찜 항목 삭제에 성공하였습니다."),
-    SEARCH_QUESTIONINFO_SUCCESS("내 문의 내역 조회에 성공하였습니다.");
+    SEARCH_QUESTIONINFO_SUCCESS("내 문의 내역 조회에 성공하였습니다."),
+    SEARCH_ORDERMANAGE_SUCCESS("주문 관리 내역 조회에 성공하였습니다.");
 
 
 

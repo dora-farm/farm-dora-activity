@@ -9,11 +9,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderManageRepository extends JpaRepository<Order, Integer> {
 
-    @Query("SELECT COUNT(DISTINCT o.id) FROM Order o " +
-            "JOIN o.orderOption oo " +
+    @Query("SELECT COUNT(DISTINCT o.id) FROM OrderOption oo " +
+            "JOIN oo.order o " +
             "JOIN oo.option opt " +
             "JOIN opt.sale s " +
-            "WHERE s.sellerId = :sellerId " +
+            "WHERE s.seller.id = :sellerId " +
             "AND (:statusId IS NULL OR o.status.id = :statusId) ")
     Long countOrdersBySeller(@Param("sellerId") Integer sellerId,
                              @Param("statusId") Short statusId);
