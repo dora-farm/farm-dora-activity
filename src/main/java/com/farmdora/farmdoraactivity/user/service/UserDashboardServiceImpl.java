@@ -1,14 +1,15 @@
 package com.farmdora.farmdoraactivity.user.service;
 
+import com.farmdora.farmdoraactivity.common.exception.ResourceNotFoundException;
 import com.farmdora.farmdoraactivity.entity.User;
 import com.farmdora.farmdoraactivity.user.dto.OrderStatusDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO;
 import com.farmdora.farmdoraactivity.user.dto.UserDashboardDTO.*;
-import com.farmdora.farmdoraactivity.user.dto.WishlistDTO;
+import com.farmdora.farmdoraactivity.user.dto.LikePreviewDTO;
 import com.farmdora.farmdoraactivity.user.repository.UserDashboardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +28,9 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDashboardDTO getDashboardInfo(@Param("userId") Integer userId) {
+    public UserDashboardDTO getDashboardInfo(Integer userId) {
 
-        User userInfo = userDashboardRepository.findById(userId).orElse(null);
+        User userInfo = userDashboardRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", userId));
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfo);
 
         Long totalAmount = userDashboardRepository.sumTotalAmount(userId);
@@ -49,7 +50,7 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderStatusDTO> getOrderStatusByUserId(@Param("userId") Integer userId) {
+    public List<OrderStatusDTO> getOrderStatusByUserId(Integer userId) {
 
         LocalDate now = LocalDate.now();
         LocalDate startDate = now.withDayOfMonth(1);
@@ -63,13 +64,14 @@ public class UserDashboardServiceImpl implements UserDashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<WishlistDTO> getWishlistByUserId(@Param("userId") Integer userId) {
+    public List<LikePreviewDTO> getWishPreviewByUserId(Integer userId) {
 
-        List<Object[]> results = userDashboardRepository.findWishlistByUserId(userId);
-        log.info("results: {}", results);
+        PageRequest pageRequest = PageRequest.of(0, 4);
+        List<Object[]> results = userDashboardRepository.findWishPreviewByUserId(userId, pageRequest);
+        log.info("마이페이지 찜리스트:  {}", results);
 
         return results.stream()
-                .map(WishlistDTO::from)
+                .map(LikePreviewDTO::from)
                 .collect(Collectors.toList());
     }
 }

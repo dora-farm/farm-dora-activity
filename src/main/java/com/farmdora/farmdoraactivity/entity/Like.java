@@ -11,6 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "`like`")
 public class Like {
 
     @Id
@@ -18,10 +19,12 @@ public class Like {
     @Column(name = "like_id")
     private Integer id;
 
-    @Column(nullable = false)
-    private Integer saleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sale_id")
+    private Sale sale;
 
-    @Column(nullable = false)
-    private Integer userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
 
