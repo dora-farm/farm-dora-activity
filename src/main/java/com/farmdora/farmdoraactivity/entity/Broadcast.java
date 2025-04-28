@@ -39,4 +39,7 @@ public class Broadcast extends BaseTimeEntity {
 
     @Column(nullable = false)
     private boolean isBlind;
+
+    @Column(nullable = false, length = 50, name= "description")
+    private String desc;
 }
