@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface OrderManageRepository extends JpaRepository<Order, Integer> {
 
@@ -29,17 +27,5 @@ public interface OrderManageRepository extends JpaRepository<Order, Integer> {
             "JOIN q.sale s " +
             "WHERE s.seller.id = :sellerId")
     Long countQuestionsBySeller(@Param("sellerId") Integer sellerId);
-
-    @Query("SELECT o.id, s.title, opt.name, o.createdDate, u.name, oo.price, os.name " +
-            "FROM OrderOption oo " +
-            "JOIN oo.order o  " +
-            "JOIN oo.option opt " +
-            "JOIN opt.sale s " +
-            "JOIN o.user u " +
-            "JOIN o.status os " +
-            "WHERE s.seller.id = :sellerId " +
-            "AND (:statusId IS NULL OR o.status.id = :statusId) ")
-    List<Object[]> findByOrders(@Param("sellerId") Integer sellerId,
-                                @Param("statusId") Short statusId);
 
 }

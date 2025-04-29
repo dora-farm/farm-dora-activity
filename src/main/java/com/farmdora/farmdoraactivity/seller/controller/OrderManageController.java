@@ -27,12 +27,4 @@ public class OrderManageController {
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERMANAGECOUNT_SUCCESS.getMessage(),
                         orderManageService.getAllStatistics(sellerId)));
     }
-
-    @GetMapping("/list")
-    public ResponseEntity<?> getOrderManageList(@RequestParam Integer sellerId) {
-        return ResponseEntity
-                .ok()
-                .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERMANAGELIST_SUCCESS.getMessage(),
-                        orderManageService.getOrderList(sellerId)));
-    }
 }
