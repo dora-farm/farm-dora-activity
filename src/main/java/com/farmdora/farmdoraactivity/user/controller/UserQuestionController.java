@@ -16,7 +16,7 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARC
 
 @RestController
 @RequestMapping("/api/my/user/question")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
 public class UserQuestionController {

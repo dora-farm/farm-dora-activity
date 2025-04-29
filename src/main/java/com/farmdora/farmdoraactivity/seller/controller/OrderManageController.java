@@ -14,17 +14,17 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARC
 
 @RestController
 @RequestMapping("/api/my/seller/order")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
 public class OrderManageController {
     private final OrderManageService orderManageService;
 
     @GetMapping
-    public ResponseEntity<HttpResponse> getOrderManageCount(@RequestParam Integer sellerId) {
+    public ResponseEntity<HttpResponse> getOrderManageCount() {
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERMANAGECOUNT_SUCCESS.getMessage(),
-                        orderManageService.getAllStatistics(sellerId)));
+                        orderManageService.getAllStatistics(1)));
     }
 }
