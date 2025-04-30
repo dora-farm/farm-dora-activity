@@ -35,6 +35,8 @@ dependencies {
 
     // jasypt
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.595'
 }
 
 tasks.named('test') {

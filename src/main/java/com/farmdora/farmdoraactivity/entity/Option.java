@@ -1,11 +1,7 @@
 package com.farmdora.farmdoraactivity.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Builder
@@ -22,18 +18,15 @@ public class Option {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "sale_id")
+    @JoinColumn(name = "sale_id")
     private Sale sale;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String name;
 
-    @Column(nullable = false)
     private int price;
 
-    @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = false)
     private boolean isStop;
 }

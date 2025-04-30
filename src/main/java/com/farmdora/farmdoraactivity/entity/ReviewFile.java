@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class SaleFile {
+public class ReviewFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +17,12 @@ public class SaleFile {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sale_id")
-    private Sale sale;
+    @JoinColumn(name = "review_id")
+    private Review review;
 
-    private String saveFile;
-
+    @Column(nullable = false)
     private String originFile;
 
-    private boolean isMain;
+    @Column(nullable = false)
+    private String saveFile;
 }
