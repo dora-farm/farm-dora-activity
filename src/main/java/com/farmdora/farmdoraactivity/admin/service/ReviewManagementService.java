@@ -39,7 +39,7 @@ public class ReviewManagementService {
 
         if (sortType.equals(SortType.LATEST)) {
             pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdDate"));
-        } else {
+        } else if(sortType.equals(SortType.OLDEST)) {
             pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "createdDate"));
         }
 

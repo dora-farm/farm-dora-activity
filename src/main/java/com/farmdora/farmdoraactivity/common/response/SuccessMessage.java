@@ -18,14 +18,14 @@ public enum SuccessMessage {
     SEARCH_WISHLIST_SUCCESS("찜 리스트 조회에 성공하였습니다."),
     REVIEW_DELETE_SUCCESS("리뷰가 성공적으로 삭제되었습니다."),
     SEARCH_REVIEW_DETAIL_SUCCESS("리뷰 상세조회에 성공하였습니다."),
-    SEARCH_REVIEW_ALL_SUCCESS("리뷰 전체 조회에 성공하였습니다.");
+    SEARCH_REVIEW_ALL_SUCCESS("리뷰 전체 조회에 성공하였습니다."),
     SEARCH_LIKE_SUCCESS("찜 리스트 조회에 성공하였습니다."),
     SEARCH_DELETELIKE_SUCCESS("찜 항목 삭제에 성공하였습니다."),
     SEARCH_QUESTIONINFO_SUCCESS("내 문의 내역 조회에 성공하였습니다."),
+    REVIEW_DELETE_SUCCESS("리뷰가 성공적으로 삭제되었습니다."),
+    SEARCH_REVIEW_DETAIL_SUCCESS("리뷰 상세조회에 성공하였습니다."),
+    SEARCH_REVIEW_ALL_SUCCESS("리뷰 전체 조회에 성공하였습니다."),
     SEARCH_ORDERMANAGE_SUCCESS("주문 관리 내역 조회에 성공하였습니다.");
-
-
-
 
     private final String message;
 }

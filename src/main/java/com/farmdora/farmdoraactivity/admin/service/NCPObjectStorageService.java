@@ -27,7 +27,12 @@ public class NCPObjectStorageService implements StorageService {
     private final String projectId;
 
     private final String defaultOptions = "?type=h&h=192&ttype=png";
-//    private final String defaultOptions = "?type=f_auto&quality=90&ttype=png";
+
+    // 이벤트 이미지 옵션: 가로 750px, 세로 2000px, 고품질
+    private final String eventImageOption = "?type=m&w=750&h=2000&bgcolor=FFFFFF&quality=90&anilimit=1&ttype=jpg";
+
+    // 배너 이미지 옵션: 가로 1320px, 세로 300px, 고품질
+    private final String bannerImageOption = "?type=m&w=1320&h=300&bgcolor=FFFFFF&quality=90&anilimit=1&ttype=jpg";
 
     public NCPObjectStorageService(
             @Value("${ncp.object-storage.endpoint}") String endpoint,
@@ -125,20 +130,23 @@ public class NCPObjectStorageService implements StorageService {
                     savedFilename,
                     inputStream,
                     metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead)); // 파일을 공개로 설정
-
-            log.info("파일 업로드 성공: {}", savedFilename);
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
             return savedFilename;
-
         } catch (Exception e) {
-            log.error("파일 업로드 실패: {}", savedFilename, e);
             throw new IOException("NCP Object Storage 업로드 실패: " + e.getMessage(), e);
         }
     }
 
     public String getObjectStorageImageUrl(String objectName) {
-        // 실제 이미지 URL 생성 // ImageOptimizer 사용.
         return String.format("%s%s%s%s", "https://" + cdnDomain + "/", projectId + "/", objectName, defaultOptions);
+    }
+
+    public String getEventImageUrl(String objectName) {
+        return String.format("%s%s%s%s", "https://" + cdnDomain + "/", projectId + "/", objectName, eventImageOption);
+    }
+
+    public String getBannerImageUrl(String objectName) {
+        return String.format("%s%s%s%s", "https://" + cdnDomain + "/", projectId + "/", objectName, bannerImageOption);
     }
 
     public void delete(String filePath) {
