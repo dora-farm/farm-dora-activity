@@ -5,3 +5,26 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+ncp:
+  object-storage:
+    endpoint: https://kr.object.ncloudstorage.com
+    region: kr-standard
+    bucket: bitcamp-68
+
+  image-optimizer:
+    project-id: O8XfcLSSm6
+    cdn-domain: zcbg41sa9729.edge.naverncp.com
+
+  access-key: ENC(5wkttIErn/14l1frTJzzBwd8QB0nempgaNyX/iXEdCy8J1ewSkZdYg==)
+  secret-key: ENC(TxYn2mu7xUGauPYawCfKenIyAL73Qp+CyzO8LBu1b3qQvCar7bJQEFjWCjfMvKJx+T+fP8ihRGM=)
+
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    key-obtention-iterations: 1000
+    pool-size: 1
+    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    password: ${JASYPT_KEY}
+
