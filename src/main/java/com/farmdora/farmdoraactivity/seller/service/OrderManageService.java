@@ -32,11 +32,13 @@ public class OrderManageService {
         return statistics;
     }
 
-    public List<OrderDetailDTO> getDetailInfo(Integer orderId) {
+    public OrderDetailDTO getDetailInfo(Integer orderId) {
         List<Object[]> results = orderManageRepository.findUserInfoByOrderId(orderId);
 
-        return results.stream()
-                .map(OrderDetailDTO::from)
-                .collect(Collectors.toList());
+        if (results.isEmpty()) {
+            return null;
+        }
+
+        return OrderDetailDTO.from(results.get(0));
     }
 }

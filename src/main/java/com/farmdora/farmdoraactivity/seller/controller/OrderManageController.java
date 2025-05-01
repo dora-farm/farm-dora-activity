@@ -32,7 +32,7 @@ public class OrderManageController {
 
     @GetMapping("/detail")
     public ResponseEntity<?> getUserInfo(@RequestParam Integer orderId) {
-        List<OrderDetailDTO> details = orderManageService.getDetailInfo(orderId);
+        OrderDetailDTO details = orderManageService.getDetailInfo(orderId);
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERDETAILINFO_SUCCESS.getMessage(), details));
     }
