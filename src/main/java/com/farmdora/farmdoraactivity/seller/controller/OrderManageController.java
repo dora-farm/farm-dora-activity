@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.seller.controller;
 
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
+import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
 import com.farmdora.farmdoraactivity.seller.service.OrderManageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_ORDERDETAILINFO_SUCCESS;
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_ORDERMANAGECOUNT_SUCCESS;
 
 @RestController
@@ -19,10 +23,17 @@ public class OrderManageController {
     private final OrderManageService orderManageService;
 
     @GetMapping
-    public ResponseEntity<HttpResponse> getOrderManageCount() {
+    public ResponseEntity<?> getOrderManageCount() {
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERMANAGECOUNT_SUCCESS.getMessage(),
                         orderManageService.getAllStatistics(1)));
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<?> getUserInfo(@RequestParam Integer orderId) {
+        List<OrderDetailDTO> details = orderManageService.getDetailInfo(orderId);
+        return ResponseEntity.ok()
+                .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERDETAILINFO_SUCCESS.getMessage(), details));
     }
 }
