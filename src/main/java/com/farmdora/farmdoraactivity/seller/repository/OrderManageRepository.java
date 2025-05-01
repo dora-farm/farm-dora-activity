@@ -36,4 +36,12 @@ public interface OrderManageRepository extends JpaRepository<Order, Integer> {
             "WHERE o.id = :orderId ")
     List<Object[]> findUserInfoByOrderId(@Param("orderId") Integer orderId);
 
+    @Query("SELECT re.createdDate, rt.name, re.content, rf.saveFile " +
+            "FROM Refund re " +
+            "JOIN re.type rt " +
+            "LEFT JOIN RefundFile rf ON rf.refund = re " +
+            "JOIN re.order o " +
+            "WHERE o.id = :orderId")
+    List<Object[]> findRefundInfoByOrderId(@Param("orderId") Integer orderId);
+
 }

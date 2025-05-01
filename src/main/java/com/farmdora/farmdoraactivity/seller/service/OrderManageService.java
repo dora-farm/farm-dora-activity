@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.seller.service;
 
 import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
+import com.farmdora.farmdoraactivity.seller.dto.RefundInfoDTO;
 import com.farmdora.farmdoraactivity.seller.repository.OrderManageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,5 +41,13 @@ public class OrderManageService {
         }
 
         return OrderDetailDTO.from(results.get(0));
+    }
+
+    public List<RefundInfoDTO> getRefundInfo(Integer orderId) {
+        List<Object[]> results = orderManageRepository.findRefundInfoByOrderId(orderId);
+
+        return results.stream()
+                .map(RefundInfoDTO::from)
+                .collect(Collectors.toList());
     }
 }

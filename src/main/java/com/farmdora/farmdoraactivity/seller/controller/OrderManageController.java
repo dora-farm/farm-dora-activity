@@ -2,6 +2,7 @@ package com.farmdora.farmdoraactivity.seller.controller;
 
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
+import com.farmdora.farmdoraactivity.seller.dto.RefundInfoDTO;
 import com.farmdora.farmdoraactivity.seller.service.OrderManageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_ORDERDETAILINFO_SUCCESS;
-import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_ORDERMANAGECOUNT_SUCCESS;
+import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 @RestController
 @RequestMapping("/api/my/seller/order")
@@ -35,5 +35,12 @@ public class OrderManageController {
         OrderDetailDTO details = orderManageService.getDetailInfo(orderId);
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERDETAILINFO_SUCCESS.getMessage(), details));
+    }
+
+    @GetMapping("/refund")
+    public ResponseEntity<?> getRefundInfo(@RequestParam Integer orderId) {
+        List<RefundInfoDTO> refundInfo = orderManageService.getRefundInfo(orderId);
+        return ResponseEntity.ok()
+                .body(new HttpResponse(HttpStatus.OK, SEARCH_REFUNDINFO_SUCCESS.getMessage(), refundInfo));
     }
 }
