@@ -24,7 +24,8 @@ public enum SuccessMessage {
     SEARCH_QUESTIONINFO_SUCCESS("내 문의 내역 조회에 성공하였습니다."),
     SEARCH_ORDERMANAGECOUNT_SUCCESS("주문 관리 갯수 조회에 성공하였습니다."),
     SEARCH_ORDERDETAILINFO_SUCCESS("주문 상세정보 조회에 성공하였습니다."),
-    SEARCH_REFUNDINFO_SUCCESS("반품 정보 조회에 성공하였습니다.");
+    SEARCH_REFUNDINFO_SUCCESS("반품 정보 조회에 성공하였습니다."),
+    SEARCH_REVIEWINFO_SUCCESS("반품 정보 조회에 성공하였습니다.");
 
 
 

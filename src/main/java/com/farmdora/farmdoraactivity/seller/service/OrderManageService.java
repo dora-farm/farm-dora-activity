@@ -2,6 +2,7 @@ package com.farmdora.farmdoraactivity.seller.service;
 
 import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
 import com.farmdora.farmdoraactivity.seller.dto.RefundInfoDTO;
+import com.farmdora.farmdoraactivity.seller.dto.ReviewInfoDTO;
 import com.farmdora.farmdoraactivity.seller.repository.OrderManageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,14 @@ public class OrderManageService {
         return results.stream()
                 .map(RefundInfoDTO::from)
                 .collect(Collectors.toList());
+    }
+
+    public List<ReviewInfoDTO> getReviewInfo(Integer reviewId) {
+        List<Object[]> results = orderManageRepository.findReviewInfo(reviewId);
+
+        return results.stream()
+                .map(ReviewInfoDTO::from)
+                .collect(Collectors.toList());
+
     }
 }

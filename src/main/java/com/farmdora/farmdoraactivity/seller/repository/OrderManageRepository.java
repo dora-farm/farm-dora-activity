@@ -44,4 +44,10 @@ public interface OrderManageRepository extends JpaRepository<Order, Integer> {
             "WHERE o.id = :orderId")
     List<Object[]> findRefundInfoByOrderId(@Param("orderId") Integer orderId);
 
+    @Query("SELECT rf.saveFile, o.id " +
+            "FROM Review r " +
+            "JOIN ReviewFile rf ON rf.review.id = r.id " +
+            "JOIN r.order o " +
+            "WHERE r.id = :reviewId")
+    List<Object[]> findReviewInfo(@Param("reviewId") Integer reviewId);
 }

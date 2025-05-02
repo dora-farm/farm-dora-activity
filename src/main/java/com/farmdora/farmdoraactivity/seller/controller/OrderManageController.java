@@ -3,6 +3,7 @@ package com.farmdora.farmdoraactivity.seller.controller;
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
 import com.farmdora.farmdoraactivity.seller.dto.RefundInfoDTO;
+import com.farmdora.farmdoraactivity.seller.dto.ReviewInfoDTO;
 import com.farmdora.farmdoraactivity.seller.service.OrderManageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,5 +43,12 @@ public class OrderManageController {
         List<RefundInfoDTO> refundInfo = orderManageService.getRefundInfo(orderId);
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_REFUNDINFO_SUCCESS.getMessage(), refundInfo));
+    }
+
+    @GetMapping("/review")
+    public ResponseEntity<?> getReviewInfo(@RequestParam Integer reviewId) {
+        List<ReviewInfoDTO> reviewInfo = orderManageService.getReviewInfo(reviewId);
+        return ResponseEntity.ok()
+                .body(new HttpResponse(HttpStatus.OK, SEARCH_REVIEWINFO_SUCCESS.getMessage(), reviewInfo));
     }
 }
