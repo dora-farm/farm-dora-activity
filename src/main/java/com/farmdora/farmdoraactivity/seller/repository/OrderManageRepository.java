@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface OrderManageRepository extends JpaRepository<Order, Integer> {
 
@@ -28,4 +30,24 @@ public interface OrderManageRepository extends JpaRepository<Order, Integer> {
             "WHERE s.seller.id = :sellerId")
     Long countQuestionsBySeller(@Param("sellerId") Integer sellerId);
 
+    @Query("SELECT u.name, u.phoneNum, o.address " +
+            "FROM Order o " +
+            "JOIN o.user u " +
+            "WHERE o.id = :orderId ")
+    List<Object[]> findUserInfoByOrderId(@Param("orderId") Integer orderId);
+
+    @Query("SELECT re.createdDate, rt.name, re.content, rf.saveFile " +
+            "FROM Refund re " +
+            "JOIN re.type rt " +
+            "LEFT JOIN RefundFile rf ON rf.refund = re " +
+            "JOIN re.order o " +
+            "WHERE o.id = :orderId")
+    List<Object[]> findRefundInfoByOrderId(@Param("orderId") Integer orderId);
+
+    @Query("SELECT rf.saveFile, o.id " +
+            "FROM Review r " +
+            "JOIN ReviewFile rf ON rf.review.id = r.id " +
+            "JOIN r.order o " +
+            "WHERE r.id = :reviewId")
+    List<Object[]> findReviewInfo(@Param("reviewId") Integer reviewId);
 }

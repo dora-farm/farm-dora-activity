@@ -1,12 +1,18 @@
 package com.farmdora.farmdoraactivity.seller.service;
 
+import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
+import com.farmdora.farmdoraactivity.seller.dto.RefundInfoDTO;
+import com.farmdora.farmdoraactivity.seller.dto.ReviewInfoDTO;
 import com.farmdora.farmdoraactivity.seller.repository.OrderManageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -16,6 +22,7 @@ public class OrderManageService {
 
     public Map<String, Long> getAllStatistics(Integer sellerId) {
         Map<String, Long> statistics = new HashMap<>();
+
         statistics.put("totalOrders", orderManageRepository.countOrdersBySeller(sellerId, null));
         statistics.put("newOrders", orderManageRepository.countOrdersBySeller(sellerId, (short)1));
         statistics.put("exchangeOrders", orderManageRepository.countOrdersBySeller(sellerId, (short)6));
@@ -23,6 +30,34 @@ public class OrderManageService {
         statistics.put("cancelOrders", orderManageRepository.countOrdersBySeller(sellerId, (short)4));
         statistics.put("reviewCount", orderManageRepository.countReviewsBySeller(sellerId));
         statistics.put("questionCount", orderManageRepository.countQuestionsBySeller(sellerId));
+
         return statistics;
+    }
+
+    public OrderDetailDTO getDetailInfo(Integer orderId) {
+        List<Object[]> results = orderManageRepository.findUserInfoByOrderId(orderId);
+
+        if (results.isEmpty()) {
+            return null;
+        }
+
+        return OrderDetailDTO.from(results.get(0));
+    }
+
+    public List<RefundInfoDTO> getRefundInfo(Integer orderId) {
+        List<Object[]> results = orderManageRepository.findRefundInfoByOrderId(orderId);
+
+        return results.stream()
+                .map(RefundInfoDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReviewInfoDTO> getReviewInfo(Integer reviewId) {
+        List<Object[]> results = orderManageRepository.findReviewInfo(reviewId);
+
+        return results.stream()
+                .map(ReviewInfoDTO::from)
+                .collect(Collectors.toList());
+
     }
 }
