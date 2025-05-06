@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/popup")
+@RequestMapping("/api/admin/popup")
 @RequiredArgsConstructor
 public class PopupController {
 
