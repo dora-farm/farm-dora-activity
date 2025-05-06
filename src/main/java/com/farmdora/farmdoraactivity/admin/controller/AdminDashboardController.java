@@ -18,7 +18,7 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARC
 
 @RestController
 @RequestMapping("/api/admin/dashboard")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
 public class AdminDashboardController {

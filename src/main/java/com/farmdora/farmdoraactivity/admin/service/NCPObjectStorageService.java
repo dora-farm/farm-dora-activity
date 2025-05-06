@@ -1,5 +1,6 @@
 package com.farmdora.farmdoraactivity.admin.service;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -99,11 +100,14 @@ public class NCPObjectStorageService implements StorageService {
     public String uploadImage(MultipartFile file, String folderPath) throws IOException {
         String originalFilename = file.getOriginalFilename();
 
+        // 저장할 파일명 생성 (UUID + 확장자)
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String savedFilename = UUID.randomUUID() + fileExtension;
 
+        // 폴더 경로가 있으면 추가
         String fullPath = savedFilename;
         if (folderPath != null && !folderPath.isEmpty()) {
+            // 폴더 경로 끝에 슬래시가 있으면 제거
             if (folderPath.endsWith("/")) {
                 folderPath = folderPath.substring(0, folderPath.length() - 1);
             }
@@ -128,7 +132,6 @@ public class NCPObjectStorageService implements StorageService {
                     metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             return savedFilename;
-
         } catch (Exception e) {
             throw new IOException("NCP Object Storage 업로드 실패: " + e.getMessage(), e);
         }

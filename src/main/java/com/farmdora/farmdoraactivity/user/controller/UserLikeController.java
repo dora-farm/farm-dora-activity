@@ -15,7 +15,7 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 @RestController
 @RequestMapping("api/my/user/like")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
 public class UserLikeController {
