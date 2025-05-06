@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface DashboardService {
-    Map<String, Object> getSalesData(Integer sellerId, LocalDate startDate, LocalDate endDate, Period period);
+    Map<String, Object> getSalesData(Integer userId, LocalDate startDate, LocalDate endDate, Period period);
 
-    List<ProductRatioDTO> findProductTypeCountBySellerId(Integer sellerId);
+    List<ProductRatioDTO> findProductTypeCountBySellerId(Integer userId);
 
-    List<StatusRatioDTO> findStatusTypeCountBySellerId(Integer sellerId);
+    List<StatusRatioDTO> findStatusTypeCountBySellerId(Integer userId);
 }

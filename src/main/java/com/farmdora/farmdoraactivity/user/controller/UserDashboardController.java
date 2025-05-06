@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
@@ -25,7 +26,8 @@ public class UserDashboardController {
     private final UserDashboardService userDashboardService;
 
     @GetMapping("/info")
-    public ResponseEntity<?> getUserInfo(@RequestParam Integer userId) {
+    public ResponseEntity<?> getUserInfo(Principal principal) {
+        Integer userId = Integer.parseInt(principal.getName());
 
         UserDashboardDTO userDashboardDTO = userDashboardService.getDashboardInfo(userId);
         return ResponseEntity
@@ -34,7 +36,8 @@ public class UserDashboardController {
     }
 
     @GetMapping("/order-status")
-    public ResponseEntity<?> getOrderStatusInfo(@RequestParam Integer userId) {
+    public ResponseEntity<?> getOrderStatusInfo(Principal principal) {
+        Integer userId = Integer.parseInt(principal.getName());
 
         List<OrderStatusDTO> orderStatusCounts = userDashboardService.getOrderStatusByUserId(userId);
         return ResponseEntity
@@ -43,7 +46,8 @@ public class UserDashboardController {
     }
 
     @GetMapping("/likepreview")
-    public ResponseEntity<?> getWishPreviewInfo(@RequestParam Integer userId) {
+    public ResponseEntity<?> getWishPreviewInfo(Principal principal) {
+        Integer userId = Integer.parseInt(principal.getName());
 
         List<LikePreviewDTO> likePreviews = userDashboardService.getWishPreviewByUserId(userId);
         return ResponseEntity

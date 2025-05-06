@@ -21,29 +21,31 @@ public interface DashboardRepository extends JpaRepository<OrderOption, Integer>
             "JOIN oo.option opt " +
             "JOIN opt.sale s " +
             "JOIN s.seller sel " +
-            "WHERE sel.id = :sellerId " +
+            "WHERE sel.user.userId = :userId " +
             "AND DATE(o.createdDate) BETWEEN :startDate AND :endDate " +
             "GROUP BY DATE(o.createdDate), sel.id " +
             "ORDER BY DATE(o.createdDate) ASC ")
     List<SalesOverviewDTO> findDailySalesBySellerId (
-            @Param("sellerId") Integer sellerId,
+            @Param("userId") Integer userId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
     @Query("SELECT COUNT(oo) FROM OrderOption oo " +
             "JOIN oo.option o " +
             "JOIN o.sale s " +
-            "WHERE s.seller.id = :sellerId ")
-    int countBySellerId(@Param("sellerId") Integer sellerId);
+            "JOIN s.seller sel " +
+            "WHERE sel.user.userId = :userId ")
+    int countBySellerId(@Param("userId") Integer userId);
 
     @Query("SELECT new com.farmdora.farmdoraactivity.seller.dto.ProductRatioDTO(st.name, COUNT(oo)) " +
             "FROM OrderOption oo " +
             "JOIN oo.option opt " +
             "JOIN opt.sale s " +
             "JOIN s.type st " +
-            "WHERE s.seller.id = :sellerId " +
+            "JOIN s.seller sel " +
+            "WHERE sel.user.userId = :userId " +
             "GROUP BY st.id, st.name ")
-    List<ProductRatioDTO> findProductTypeCountBySellerId(@Param("sellerId") Integer sellerId);
+    List<ProductRatioDTO> findProductTypeCountBySellerId(@Param("userId") Integer userId);
 
     @Query("SELECT new com.farmdora.farmdoraactivity.seller.dto.StatusRatioDTO(os.name, COUNT(o.id)) " +
             "FROM OrderOption oo " +
@@ -51,8 +53,9 @@ public interface DashboardRepository extends JpaRepository<OrderOption, Integer>
             "JOIN o.status os " +
             "JOIN oo.option opt " +
             "JOIN opt.sale s " +
-            "WHERE s.seller.id = :sellerId " +
+            "JOIN s.seller sel " +
+            "WHERE sel.user.userId = :userId " +
             "AND os.name NOT IN ('배송준비', '배송중')" +
             "GROUP BY os.name ")
-    List<StatusRatioDTO> findStatusTypeCountBySellerId(@Param("sellerId") Integer sellerId);
+    List<StatusRatioDTO> findStatusTypeCountBySellerId(@Param("userId") Integer userId);
 }

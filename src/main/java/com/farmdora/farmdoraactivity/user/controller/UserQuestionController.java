@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,9 +25,11 @@ public class UserQuestionController {
 
     @GetMapping
     public ResponseEntity<?> getQuestions(
-            @RequestParam Integer userId,
+            Principal principal,
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate) {
+
+        Integer userId = Integer.parseInt(principal.getName());
 
         List<QuestionDTO> questions = userQuestionService.getQuestions(userId, startDate, endDate);
         return ResponseEntity.ok()
