@@ -46,8 +46,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
-      base-path: /actuator
+        include: "*"
   endpoint:
     health:
       show-details: always
