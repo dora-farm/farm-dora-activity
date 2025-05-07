@@ -20,7 +20,7 @@ import java.util.Map;
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 @RestController
-@RequestMapping("/api/my/seller/dashboard")
+@RequestMapping("${api.prefix}/my/seller/dashboard")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j

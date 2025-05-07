@@ -16,7 +16,7 @@ import java.util.List;
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_QUESTIONINFO_SUCCESS;
 
 @RestController
-@RequestMapping("/api/my/user/question")
+@RequestMapping("${api.prefix}/my/user/question")
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
@@ -29,6 +29,7 @@ public class UserQuestionController {
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate) {
         Integer userId = Integer.parseInt(principal.getName());
+
 
         List<QuestionDTO> questions = userQuestionService.getQuestions(userId, startDate, endDate);
         return ResponseEntity.ok()

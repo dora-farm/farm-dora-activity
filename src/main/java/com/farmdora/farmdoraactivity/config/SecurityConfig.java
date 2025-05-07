@@ -64,8 +64,9 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000"
-                // 추가 필요한 도메인들...
+                "http://localhost:3000",
+                "http://www.farm-dora.kro.kr",
+                "http://farm-dora.kro.kr"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));

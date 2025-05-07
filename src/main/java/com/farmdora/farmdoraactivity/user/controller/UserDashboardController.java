@@ -17,7 +17,7 @@ import java.util.List;
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 @RestController
-@RequestMapping("api/my/user/dashboard")
+@RequestMapping("${api.prefix}/my/user/dashboard")
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
