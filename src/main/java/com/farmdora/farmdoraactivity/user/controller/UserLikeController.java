@@ -9,12 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 @RestController
-@RequestMapping("api/my/user/like")
+@RequestMapping("${api.prefix}/my/user/like")
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
@@ -23,7 +24,10 @@ public class UserLikeController {
     private final UserLikeService userLikeService;
 
     @GetMapping
-    public ResponseEntity<?> getLike(@RequestParam Integer userId) {
+    public ResponseEntity<?> getLike(Principal principal) {
+
+        Integer userId = Integer.parseInt(principal.getName());
+
         List<LikeDTO> likes = userLikeService.getLikeByUserId(userId);
         return ResponseEntity
                 .ok()

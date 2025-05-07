@@ -16,14 +16,14 @@ import java.util.List;
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 @RestController
-@RequestMapping("/api/my/seller/order")
+@RequestMapping("${api.prefix}/my/seller/order")
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
 public class OrderManageController {
     private final OrderManageService orderManageService;
 
-    @GetMapping
+    @GetMapping("/order")
     public ResponseEntity<?> getOrderManageCount() {
         return ResponseEntity
                 .ok()
