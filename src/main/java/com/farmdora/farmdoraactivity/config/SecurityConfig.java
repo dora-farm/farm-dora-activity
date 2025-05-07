@@ -39,24 +39,22 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((auth)-> auth
-                        // 공개 API
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
-                        // 특정 권한이 필요한 API
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/seller/**").hasRole("SELLER")
                         .requestMatchers("/api/user/**").hasRole("USER")
-                        // 여러 권한에 접근 가능한 API
                         .requestMatchers("/api/common/**").hasAnyRole("ADMIN", "SELLER", "USER")
-                        .requestMatchers("/actuator/health").permitAll()
-                        // 그 외 요청은 인증만 필요
                         .anyRequest().authenticated())
+                // 필터를 설정할 때, actuator 경로를 제외합니다.
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil),
                         UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement((session)->
+                .sessionManagement((session) ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
