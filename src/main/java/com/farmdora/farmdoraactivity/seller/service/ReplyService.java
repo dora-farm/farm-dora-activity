@@ -1,8 +1,10 @@
 package com.farmdora.farmdoraactivity.seller.service;
 
+import com.farmdora.farmdoraactivity.entity.Question;
 import com.farmdora.farmdoraactivity.entity.Review;
 import com.farmdora.farmdoraactivity.seller.dto.ReviewDTO;
 import com.farmdora.farmdoraactivity.seller.repository.*;
+import com.farmdora.farmdoraactivity.seller.dto.QuestionDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +35,35 @@ public class ReplyService {
         review.setReply(null);
     }
 
-    // 공통 로직을 private 메서드로 추출
+
+    public void updateQuestionReply(QuestionDTO questionDTO) {
+        setQuestionReply(questionDTO);
+    }
+
+    public void insertQuestionReply(QuestionDTO questionDTO) {
+        setQuestionReply(questionDTO);
+    }
+
+    public void deleteQuestionReply(Integer questionId) {
+        Question question = replyQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("문의룰 찾을 수 없습니다. ID: " + questionId));
+        question.setAnswer(null);
+        question.setProcess(false);
+    }
+
     private void setReviewReply(ReviewDTO reviewDTO) {
         Review review = replyReviewRepository.findById(reviewDTO.getReviewId())
                 .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다. ID: " + reviewDTO.getReviewId()));
 
         review.setReply(reviewDTO.getReply());
+    }
+
+    private void setQuestionReply(QuestionDTO questionDTO) {
+        Question question = replyQuestionRepository.findById(questionDTO.getQuestionId())
+                .orElseThrow(() -> new EntityNotFoundException("문의를 찾을 수 없습니다. ID: " + questionDTO.getQuestionId()));
+
+        question.setAnswer(questionDTO.getReply());
+        question.setProcess(true);
     }
 
 

@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.seller.controller;
 
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
+import com.farmdora.farmdoraactivity.seller.dto.QuestionDTO;
 import com.farmdora.farmdoraactivity.seller.dto.ReviewDTO;
 import com.farmdora.farmdoraactivity.seller.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,26 @@ public class ReplyController {
 
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, REVIEW_DELETE_SUCCESS.getMessage(), reviewId));
+    }
+
+    @PutMapping("/question/update")
+    public ResponseEntity<?> updateQuestionReply(@RequestBody QuestionDTO questionDTO) {
+        replyService.updateQuestionReply(questionDTO);
+        return ResponseEntity.ok()
+                .body(new HttpResponse(HttpStatus.OK, QUESTION_UPDATE_SUCCESS.getMessage(), questionDTO));
+    }
+
+    @PostMapping("/question/insert")
+    public ResponseEntity<?> insertQuestionReply(@RequestBody QuestionDTO questionDTO) {
+        replyService.insertQuestionReply(questionDTO);
+        return ResponseEntity.ok()
+                .body(new HttpResponse(HttpStatus.OK, QUESTION_INSERT_SUCCESS.getMessage(), questionDTO));
+    }
+
+    @DeleteMapping("/question/delete")
+    public ResponseEntity<?> deleteQuestionReply(@RequestParam Integer questionId) {
+        replyService.deleteQuestionReply(questionId);
+        return ResponseEntity.ok()
+                .body(new HttpResponse(HttpStatus.OK, QUESTION_DELETE_SUCCESS.getMessage(), questionId));
     }
 }

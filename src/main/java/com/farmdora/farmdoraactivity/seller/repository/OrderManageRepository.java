@@ -54,6 +54,6 @@ public interface OrderManageRepository extends JpaRepository<Order, Integer> {
             "WHERE r.id = :reviewId")
     List<Object[]> findReviewInfo(@Param("reviewId") Integer reviewId);
 
-    @Query("SELECT q.answer, q.content FROM Question q WHERE q.id = :questionId")
+    @Query("SELECT q.content, q.answer FROM Question q WHERE q.id = :questionId")
     List<Object[]> findAnswerById(Integer questionId);
 }
