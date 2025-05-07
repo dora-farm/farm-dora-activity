@@ -37,6 +37,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/health").permitAll()
+                        .anyRequest().authenticated()
+                )
 //                .authorizeHttpRequests((auth)-> auth
 //                        // 공개 API
 //                        .requestMatchers("/api/public/**").permitAll()
