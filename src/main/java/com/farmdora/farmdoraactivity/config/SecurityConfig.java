@@ -1,5 +1,6 @@
 package com.farmdora.farmdoraactivity.config;
 
+import com.farmdora.farmdoraactivity.jwt.JwtAuthenticationFilter;
 import com.farmdora.farmdoraactivity.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,23 +39,20 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests((auth)-> auth
+                        // 공개 API
+                        .requestMatchers("/api/public/**").permitAll()
+                        // 특정 권한이 필요한 API
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/seller/**").hasRole("SELLER")
+                        .requestMatchers("/api/user/**").hasRole("USER")
+                        // 여러 권한에 접근 가능한 API
+                        .requestMatchers("/api/common/**").hasAnyRole("ADMIN", "SELLER", "USER")
                         .requestMatchers("/actuator/health").permitAll()
-                        .anyRequest().authenticated()
-                )
-//                .authorizeHttpRequests((auth)-> auth
-//                        // 공개 API
-//                        .requestMatchers("/api/public/**").permitAll()
-//                        // 특정 권한이 필요한 API
-//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/seller/**").hasRole("SELLER")
-//                        .requestMatchers("/api/user/**").hasRole("USER")
-//                        // 여러 권한에 접근 가능한 API
-//                        .requestMatchers("/api/common/**").hasAnyRole("ADMIN", "SELLER", "USER")
-//                        // 그 외 요청은 인증만 필요
-//                        .anyRequest().authenticated())
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil),
-//                        UsernamePasswordAuthenticationFilter.class)
+                        // 그 외 요청은 인증만 필요
+                        .anyRequest().authenticated())
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil),
+                        UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((session)->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
