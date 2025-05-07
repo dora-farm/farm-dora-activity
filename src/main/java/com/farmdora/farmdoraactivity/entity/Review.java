@@ -28,6 +28,9 @@ public class Review extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Column(columnDefinition = "TEXT")
+    private String reply;
+
     @Column(nullable = false)
     private byte score;
 }
