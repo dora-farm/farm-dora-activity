@@ -17,7 +17,7 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARC
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.SEARCH_TOTALUSERS_SUCCESS;
 
 @RestController
-@RequestMapping("/api/admin/dashboard")
+@RequestMapping("${api.prefix}/admin/dashboard")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j

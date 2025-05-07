@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/review")
+@RequestMapping("${api.prefix}/admin/review")
 @RequiredArgsConstructor
 @Slf4j
 public class ReviewManagementController {

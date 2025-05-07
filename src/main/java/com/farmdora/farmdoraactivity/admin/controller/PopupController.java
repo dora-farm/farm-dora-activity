@@ -8,20 +8,17 @@ import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.common.response.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/admin/popup")
+@RequestMapping("${api.prefix}/admin/popup")
 @RequiredArgsConstructor
 public class PopupController {
 
