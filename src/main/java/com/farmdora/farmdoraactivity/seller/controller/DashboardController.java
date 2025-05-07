@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -30,34 +29,27 @@ public class DashboardController {
 
     @GetMapping("/sales")
     public ResponseEntity<?> getSales(
-            Principal principal,
+            @RequestParam Integer sellerId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "DAILY") Period period) {
-
-        Integer userId = Integer.parseInt(principal.getName());
-
-        Map<String, Object> result = dashboardService.getSalesData(userId, startDate, endDate, period);
+        Map<String, Object> result = dashboardService.getSalesData(sellerId, startDate, endDate, period);
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_SALESTATUS_SUCCESS.getMessage(), result));
     }
 
     @GetMapping("/status")
-    public ResponseEntity<?> getStatusRatio(Principal principal) {
-        Integer userId = Integer.parseInt(principal.getName());
-
-        List<StatusRatioDTO> result = dashboardService.findStatusTypeCountBySellerId(userId);
+    public ResponseEntity<?> getStatusRatio(@RequestParam Integer sellerId) {
+        List<StatusRatioDTO> result = dashboardService.findStatusTypeCountBySellerId(sellerId);
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_STATUSRATIO_SUCCESS.getMessage(), result));
     }
 
     @GetMapping("/product")
-    public ResponseEntity<?> getProductRatio(Principal principal) {
-        Integer userId = Integer.parseInt(principal.getName());
-
-        List<ProductRatioDTO> result = dashboardService.findProductTypeCountBySellerId(userId);
+    public ResponseEntity<?> getProductRatio(@RequestParam Integer sellerId) {
+        List<ProductRatioDTO> result = dashboardService.findProductTypeCountBySellerId(sellerId);
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_PRODUCTRATIO_SUCCESS.getMessage(), result));

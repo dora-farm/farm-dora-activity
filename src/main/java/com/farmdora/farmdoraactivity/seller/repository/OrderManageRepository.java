@@ -15,23 +15,20 @@ public interface OrderManageRepository extends JpaRepository<Order, Integer> {
             "JOIN oo.order o " +
             "JOIN oo.option opt " +
             "JOIN opt.sale s " +
-            "JOIN s.seller sel " +
-            "WHERE sel.user.userId = :userId " +
+            "WHERE s.seller.id = :sellerId " +
             "AND (:statusId IS NULL OR o.status.id = :statusId) ")
-    Long countOrdersBySeller(@Param("userId") Integer userId,
+    Long countOrdersBySeller(@Param("sellerId") Integer sellerId,
                              @Param("statusId") Short statusId);
 
     @Query("SELECT COUNT(r) FROM Review r " +
             "JOIN r.sale s " +
-            "JOIN s.seller sel " +
-            "WHERE sel.user.userId = :userId ")
-    Long countReviewsBySeller(@Param("userId") Integer userId);
+            "WHERE s.seller.id = :sellerId")
+    Long countReviewsBySeller(@Param("sellerId") Integer sellerId);
 
     @Query("SELECT COUNT(q) FROM Question q " +
             "JOIN q.sale s " +
-            "JOIN s.seller sel " +
-            "WHERE sel.user.userId = :userId ")
-    Long countQuestionsBySeller(@Param("userId") Integer userId);
+            "WHERE s.seller.id = :sellerId")
+    Long countQuestionsBySeller(@Param("sellerId") Integer sellerId);
 
     @Query("SELECT u.name, u.phoneNum, o.address " +
             "FROM Order o " +
@@ -53,7 +50,4 @@ public interface OrderManageRepository extends JpaRepository<Order, Integer> {
             "JOIN r.order o " +
             "WHERE r.id = :reviewId")
     List<Object[]> findReviewInfo(@Param("reviewId") Integer reviewId);
-
-    @Query("SELECT q.answer, q.content FROM Question q WHERE q.id = :questionId")
-    List<Object[]> findAnswerById(Integer questionId);
 }

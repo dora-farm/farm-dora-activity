@@ -28,8 +28,8 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public Map<String, Object> getSalesData(Integer userId, LocalDate startDate, LocalDate endDate, Period period) {
-        List<SalesOverviewDTO> dailySales = findDailySalesBySellerId(userId, startDate, endDate);
+    public Map<String, Object> getSalesData(Integer sellerId, LocalDate startDate, LocalDate endDate, Period period) {
+        List<SalesOverviewDTO> dailySales = findDailySalesBySellerId(sellerId, startDate, endDate);
         if (period.equals(Period.DAILY)) {
             return dashboardMapper.formatDailyData(dailySales);
         } else if (period.equals(Period.WEEKLY)) {
@@ -40,8 +40,8 @@ public class DashboardServiceImpl implements DashboardService {
         return dashboardMapper.formatDailyData(dailySales);
     }
 
-    private List<SalesOverviewDTO> findDailySalesBySellerId(Integer userId, LocalDate startDate, LocalDate endDate) {
-        List<SalesOverviewDTO> salesDate = dashboardRepository.findDailySalesBySellerId(userId, startDate, endDate);
+    private List<SalesOverviewDTO> findDailySalesBySellerId(Integer sellerId, LocalDate startDate, LocalDate endDate) {
+        List<SalesOverviewDTO> salesDate = dashboardRepository.findDailySalesBySellerId(sellerId, startDate, endDate);
 
         Map<LocalDate, SalesOverviewDTO> salesByDate = salesDate.stream()
                 .collect(Collectors.toMap(SalesOverviewDTO::getCreatedDate, dto -> dto));
@@ -52,7 +52,7 @@ public class DashboardServiceImpl implements DashboardService {
             SalesOverviewDTO dto = salesByDate.get(currentDate);
             if (dto == null) {
                 java.sql.Date sqlDate = java.sql.Date.valueOf(currentDate);
-                dto = new SalesOverviewDTO(sqlDate, 0L, userId);
+                dto = new SalesOverviewDTO(sqlDate, 0L, sellerId);
             }
             result.add(dto);
             currentDate = currentDate.plusDays(1);
@@ -63,9 +63,9 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductRatioDTO> findProductTypeCountBySellerId(Integer userId) {
-        int totalOrder = dashboardRepository.countBySellerId(userId);
-        List<ProductRatioDTO> productTypeCountRawData = dashboardRepository.findProductTypeCountBySellerId(userId);
+    public List<ProductRatioDTO> findProductTypeCountBySellerId(Integer sellerId) {
+        int totalOrder = dashboardRepository.countBySellerId(sellerId);
+        List<ProductRatioDTO> productTypeCountRawData = dashboardRepository.findProductTypeCountBySellerId(sellerId);
         for (ProductRatioDTO productRatioDTO : productTypeCountRawData) {
             productRatioDTO.setPercentage(totalOrder > 0 ? (productRatioDTO.getCount() * 100.0) / totalOrder : 0.0);
         }
@@ -75,9 +75,9 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StatusRatioDTO> findStatusTypeCountBySellerId(Integer userId) {
-        int totalOrder = dashboardRepository.countBySellerId(userId);
-        List<StatusRatioDTO> statusTypeCountRawData = dashboardRepository.findStatusTypeCountBySellerId(userId);
+    public List<StatusRatioDTO> findStatusTypeCountBySellerId(Integer sellerId) {
+        int totalOrder = dashboardRepository.countBySellerId(sellerId);
+        List<StatusRatioDTO> statusTypeCountRawData = dashboardRepository.findStatusTypeCountBySellerId(sellerId);
         for (StatusRatioDTO statusRatioDTO : statusTypeCountRawData) {
             statusRatioDTO.setPercentage(totalOrder > 0 ? statusRatioDTO.getCount() * 100.0 / totalOrder : 0.0);
         }

@@ -2,7 +2,6 @@ package com.farmdora.farmdoraactivity.seller.controller;
 
 import com.farmdora.farmdoraactivity.common.response.HttpResponse;
 import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
-import com.farmdora.farmdoraactivity.seller.dto.QuestionInfoDTO;
 import com.farmdora.farmdoraactivity.seller.dto.RefundInfoDTO;
 import com.farmdora.farmdoraactivity.seller.dto.ReviewInfoDTO;
 import com.farmdora.farmdoraactivity.seller.service.OrderManageService;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
@@ -26,12 +24,11 @@ public class OrderManageController {
     private final OrderManageService orderManageService;
 
     @GetMapping
-    public ResponseEntity<?> getOrderManageCount(Principal principal) {
-        Integer userId = Integer.parseInt(principal.getName());
+    public ResponseEntity<?> getOrderManageCount() {
         return ResponseEntity
                 .ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_ORDERMANAGECOUNT_SUCCESS.getMessage(),
-                        orderManageService.getAllStatistics(userId)));
+                        orderManageService.getAllStatistics(1)));
     }
 
     @GetMapping("/detail")
@@ -53,12 +50,5 @@ public class OrderManageController {
         List<ReviewInfoDTO> reviewInfo = orderManageService.getReviewInfo(reviewId);
         return ResponseEntity.ok()
                 .body(new HttpResponse(HttpStatus.OK, SEARCH_REVIEWINFO_SUCCESS.getMessage(), reviewInfo));
-    }
-
-    @GetMapping("/question")
-    public ResponseEntity<?> getQuestionInfo(@RequestParam Integer questionId) {
-        List<QuestionInfoDTO> questionAnswer = orderManageService.getQuestionAnswer(questionId);
-        return ResponseEntity.ok()
-                .body(new HttpResponse(HttpStatus.OK, SEARCH_QUESTIONANSWER_SUCCESS.getMessage(), questionAnswer));
     }
 }

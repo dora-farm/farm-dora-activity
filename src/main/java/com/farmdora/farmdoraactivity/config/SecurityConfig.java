@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/**").hasRole("USER")
                         // 여러 권한에 접근 가능한 API
                         .requestMatchers("/api/common/**").hasAnyRole("ADMIN", "SELLER", "USER")
+                        .requestMatchers("/actuator/health").permitAll()
                         // 그 외 요청은 인증만 필요
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil),
