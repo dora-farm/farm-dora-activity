@@ -28,8 +28,8 @@ public class UserQuestionController {
             Principal principal,
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate) {
-
         Integer userId = Integer.parseInt(principal.getName());
+
 
         List<QuestionDTO> questions = userQuestionService.getQuestions(userId, startDate, endDate);
         return ResponseEntity.ok()

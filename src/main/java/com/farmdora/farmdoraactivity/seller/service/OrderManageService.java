@@ -1,6 +1,7 @@
 package com.farmdora.farmdoraactivity.seller.service;
 
 import com.farmdora.farmdoraactivity.seller.dto.OrderDetailDTO;
+import com.farmdora.farmdoraactivity.seller.dto.QuestionInfoDTO;
 import com.farmdora.farmdoraactivity.seller.dto.RefundInfoDTO;
 import com.farmdora.farmdoraactivity.seller.dto.ReviewInfoDTO;
 import com.farmdora.farmdoraactivity.seller.repository.OrderManageRepository;
@@ -20,16 +21,16 @@ import java.util.stream.Collectors;
 public class OrderManageService {
     private final OrderManageRepository orderManageRepository;
 
-    public Map<String, Long> getAllStatistics(Integer sellerId) {
+    public Map<String, Long> getAllStatistics(Integer userId) {
         Map<String, Long> statistics = new HashMap<>();
 
-        statistics.put("totalOrders", orderManageRepository.countOrdersBySeller(sellerId, null));
-        statistics.put("newOrders", orderManageRepository.countOrdersBySeller(sellerId, (short)1));
-        statistics.put("exchangeOrders", orderManageRepository.countOrdersBySeller(sellerId, (short)6));
-        statistics.put("refundOrders", orderManageRepository.countOrdersBySeller(sellerId, (short)5));
-        statistics.put("cancelOrders", orderManageRepository.countOrdersBySeller(sellerId, (short)4));
-        statistics.put("reviewCount", orderManageRepository.countReviewsBySeller(sellerId));
-        statistics.put("questionCount", orderManageRepository.countQuestionsBySeller(sellerId));
+        statistics.put("totalOrders", orderManageRepository.countOrdersBySeller(userId, null));
+        statistics.put("newOrders", orderManageRepository.countOrdersBySeller(userId, (short)1));
+        statistics.put("exchangeOrders", orderManageRepository.countOrdersBySeller(userId, (short)6));
+        statistics.put("refundOrders", orderManageRepository.countOrdersBySeller(userId, (short)5));
+        statistics.put("cancelOrders", orderManageRepository.countOrdersBySeller(userId, (short)4));
+        statistics.put("reviewCount", orderManageRepository.countReviewsBySeller(userId));
+        statistics.put("questionCount", orderManageRepository.countQuestionsBySeller(userId));
 
         return statistics;
     }
@@ -58,6 +59,13 @@ public class OrderManageService {
         return results.stream()
                 .map(ReviewInfoDTO::from)
                 .collect(Collectors.toList());
+    }
 
+    public List<QuestionInfoDTO> getQuestionAnswer(Integer questionId) {
+        List<Object[]> results = orderManageRepository.findAnswerById(questionId);
+
+        return results.stream()
+                .map(QuestionInfoDTO::from)
+                .collect(Collectors.toList());
     }
 }

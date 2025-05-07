@@ -25,7 +25,6 @@ public class UserLikeController {
 
     @GetMapping
     public ResponseEntity<?> getLike(Principal principal) {
-
         Integer userId = Integer.parseInt(principal.getName());
 
         List<LikeDTO> likes = userLikeService.getLikeByUserId(userId);

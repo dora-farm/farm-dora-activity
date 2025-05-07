@@ -45,6 +45,7 @@ public class DashboardController {
 
     @GetMapping("/status")
     public ResponseEntity<?> getStatusRatio(Principal principal) {
+
         Integer userId = Integer.parseInt(principal.getName());
 
         List<StatusRatioDTO> result = dashboardService.findStatusTypeCountBySellerId(userId);
@@ -56,7 +57,6 @@ public class DashboardController {
     @GetMapping("/product")
     public ResponseEntity<?> getProductRatio(Principal principal) {
         Integer userId = Integer.parseInt(principal.getName());
-
         List<ProductRatioDTO> result = dashboardService.findProductTypeCountBySellerId(userId);
         return ResponseEntity
                 .ok()

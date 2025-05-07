@@ -17,6 +17,11 @@ public enum SuccessMessage {
     SEARCH_ORDERSTATUSINFO_SUCCESS("주문 현황 조회에 성공하였습니다."),
     SEARCH_WISHLIST_SUCCESS("찜 리스트 조회에 성공하였습니다."),
     REVIEW_DELETE_SUCCESS("리뷰가 성공적으로 삭제되었습니다."),
+    REVIEW_UPDATE_SUCCESS("리뷰가 성공적으로 수정되었습니다."),
+    REVIEW_INSERT_SUCCESS("리뷰가 성공적으로 등록되었습니다."),
+    QUESTION_DELETE_SUCCESS("문의가 성공적으로 삭제되었습니다."),
+    QUESTION_UPDATE_SUCCESS("문의가 성공적으로 수정되었습니다."),
+    QUESTION_INSERT_SUCCESS("문의가 성공적으로 등록되었습니다."),
     SEARCH_REVIEW_DETAIL_SUCCESS("리뷰 상세조회에 성공하였습니다."),
     SEARCH_REVIEW_ALL_SUCCESS("리뷰 전체 조회에 성공하였습니다."),
     SEARCH_LIKE_SUCCESS("찜 리스트 조회에 성공하였습니다."),
@@ -25,7 +30,8 @@ public enum SuccessMessage {
     SEARCH_ORDERMANAGECOUNT_SUCCESS("주문 관리 갯수 조회에 성공하였습니다."),
     SEARCH_ORDERDETAILINFO_SUCCESS("주문 상세정보 조회에 성공하였습니다."),
     SEARCH_REFUNDINFO_SUCCESS("반품 정보 조회에 성공하였습니다."),
-    SEARCH_REVIEWINFO_SUCCESS("반품 정보 조회에 성공하였습니다.");
+    SEARCH_REVIEWINFO_SUCCESS("리뷰 정보 조회에 성공하였습니다."),
+    SEARCH_QUESTIONANSWER_SUCCESS("내 문의 답변 조회에 성공하였습니다.");
 
 
 

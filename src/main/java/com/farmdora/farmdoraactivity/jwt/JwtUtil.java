@@ -33,11 +33,21 @@ public class JwtUtil {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload().get("username", String.class);
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            // "username" 대신 "userId" 필드를 사용
+            Integer userId = claims.get("userId", Integer.class);
+            log.debug("토큰에서 추출한 userId: {}", userId);
+            return userId != null ? userId.toString() : null;
+        } catch (Exception e) {
+            log.error("토큰에서 username 추출 실패: {}", e.getMessage());
+            return null;
+        }
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(String token) {
@@ -47,6 +57,7 @@ public class JwtUtil {
                .parseSignedClaims(token)
                .getPayload()
                .get("role", String.class);
+        log.debug("토큰에서 추출한 role: {}", role);
        return List.of(new SimpleGrantedAuthority(role));
     }
 
@@ -59,7 +70,7 @@ public class JwtUtil {
             log.info("토큰 유효성 {}",!claims.getExpiration().before(new Date()));
             return !claims.getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            log.error("Jwt 요효성 검사 실패: {}" , e.getMessage());
+            log.error("Jwt 유효성 검사 실패: {}" , e.getMessage());
             return false;
         }
     }
