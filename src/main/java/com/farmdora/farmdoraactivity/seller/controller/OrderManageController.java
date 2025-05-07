@@ -23,7 +23,7 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 public class OrderManageController {
     private final OrderManageService orderManageService;
 
-    @GetMapping("/order")
+    @GetMapping
     public ResponseEntity<?> getOrderManageCount() {
         return ResponseEntity
                 .ok()
