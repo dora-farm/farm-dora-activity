@@ -39,18 +39,13 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((auth)-> auth
-                        // 공개 API
-                        .requestMatchers("/api/public/**").permitAll()
-                        // 특정 권한이 필요한 API
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/seller/**").hasRole("SELLER")
-                        .requestMatchers("/api/user/**").hasRole("USER")
-                        // 여러 권한에 접근 가능한 API
-                        .requestMatchers("/api/common/**").hasAnyRole("ADMIN", "SELLER", "USER")
-                        // 그 외 요청은 인증만 필요
-                        .anyRequest().authenticated())
-                // 필터를 설정할 때, actuator 경로를 제외합니다.
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/api/activity/public/**").permitAll()
+                        .requestMatchers("/api/activity/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/activity/seller/**").hasRole("SELLER")
+                        .requestMatchers("/api/activity/user/**").hasRole("USER")
+                        .requestMatchers("/api/activity/common/**").hasAnyRole("ADMIN", "SELLER", "USER")
+                        .anyRequest().permitAll())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil),
                         UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((session) ->
@@ -66,7 +61,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://www.farm-dora.kro.kr",
-                "http://farm-dora.kro.kr"
+                "http://farm-dora.kro.kr",
+                "https://farm-dora.kro.kr"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
