@@ -14,7 +14,7 @@ import static com.farmdora.farmdoraactivity.common.response.SuccessMessage.*;
 
 
 @RestController
-@RequestMapping("/api/my/seller/order")
+@RequestMapping("${api.prefix}/my/seller/order")
 @CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @Slf4j
