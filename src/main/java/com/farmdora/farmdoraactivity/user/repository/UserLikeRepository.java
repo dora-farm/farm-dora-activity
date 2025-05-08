@@ -16,11 +16,11 @@ public interface UserLikeRepository extends JpaRepository<Like, Integer> {
             "FROM Like l " +
             "JOIN l.sale s ON l.sale = s " +
             "JOIN Option o ON o.sale = s " +
-            "JOIN SaleFile sf ON sf.sale = s AND sf.isMain = false " +
+            "LEFT OUTER JOIN SaleFile sf ON sf.sale = s AND sf.isMain = false " +
             "LEFT JOIN Review re ON re.sale = s " +
             "WHERE l.user.userId = :userId " +
             "AND o.id = (SELECT MIN(o2.id) FROM Option o2 WHERE o2.sale = s) " +
-            "GROUP BY s.id, s.title, o.name, o.price, sf.saveFile, o.id, l.id    " +
+            "GROUP BY s.id, s.title, o.name, o.price, sf.saveFile, o.id, l.id " +
             "ORDER BY l.id DESC")
     List<Object[]> findLikeByUserId(@Param("userId") Integer userId);
 }
