@@ -35,12 +35,12 @@ public interface UserDashboardRepository extends JpaRepository<User, Integer> {
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
-    @Query("SELECT s.id, s.title, o.name, o.price, sf.saveFile " +
+    @Query("SELECT DISTINCT s.id, s.title, o.name, o.price, sf.saveFile " +
             "FROM Like l " +
             "JOIN l.sale s " +
             "JOIN Option o ON s.id = o.sale.id AND o.id = (" +
-                "SELECT MIN(id) " +
-                "FROM Option WHERE sale.id = s.id) " +
+            "SELECT MIN(o2.id) " +
+            "FROM Option o2 WHERE o2.sale.id = s.id) " +
             "JOIN SaleFile sf ON s.id = sf.sale.id AND sf.isMain = false " +
             "WHERE l.user.userId = :userId " +
             "ORDER BY l.id DESC ")
