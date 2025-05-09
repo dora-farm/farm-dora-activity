@@ -29,8 +29,8 @@ ncp:
     project-id: O8XfcLSSm6
     cdn-domain: zcbg41sa9729.edge.naverncp.com
 
-  access-key: ENC(oBvxn6C62QrqLs0N+lCb/UgxymXI4OALon5g0YLglZPwPFQnm6C8tw==)
-  secret-key: ENC(DF529oTSIv/sQj/hDvwfK/wWVcpf2Yrq77NrKNeZws72YdMkTsI0ziMOZr4cCFgda/jcqcaPkDM=)
+  access-key: ENC(Qt6csgd6ac5Yu+d9oLMMjBL19hWZzMIJk722uWb+NAVwki8xPWPJ5Q==)
+  secret-key: ENC(NJyd1B45LLe/rZ29jbO4SfS434rjGNGH2LbZIjIePLpZiFMwu7ixGlOOEZthqSczvzw0Cb85k0M=)
 
 jasypt:
   encryptor:

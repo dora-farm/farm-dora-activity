@@ -37,7 +37,7 @@ public class PopupController {
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createPopup(
-            PopupRequest popupRequest,
+            @ModelAttribute PopupRequest popupRequest,
             @RequestParam("file") MultipartFile file) {
 
         try {

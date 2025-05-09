@@ -4,6 +4,7 @@ import com.farmdora.farmdoraactivity.entity.Popup;
 import com.farmdora.farmdoraactivity.entity.PopupType;
 import com.farmdora.farmdoraactivity.admin.service.NCPObjectStorageService;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -34,7 +35,10 @@ public class PopupDTO {
     public static class PopupRequest {
         private Short typeId;
         private String title;
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime startDate;
+
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         private LocalDateTime endDate;
         // 파일 정보는 MultipartFile로 컨트롤러에서 직접 받음
     }
