@@ -6,12 +6,15 @@ import com.farmdora.farmdoraactivity.admin.dto.SortType;
 import com.farmdora.farmdoraactivity.admin.repository.OrderOptionRepository;
 import com.farmdora.farmdoraactivity.admin.repository.ReviewFileRepository;
 import com.farmdora.farmdoraactivity.admin.repository.ReviewManagementRepository;
+import com.farmdora.farmdoraactivity.admin.repository.SaleFileRepository;
 import com.farmdora.farmdoraactivity.common.exception.ResourceAlreadyExistsException;
 import com.farmdora.farmdoraactivity.common.exception.ResourceNotFoundException;
 import com.farmdora.farmdoraactivity.common.response.PageResponseDto;
 import com.farmdora.farmdoraactivity.entity.OrderOption;
 import com.farmdora.farmdoraactivity.entity.Review;
 import com.farmdora.farmdoraactivity.entity.ReviewFile;
+import com.farmdora.farmdoraactivity.entity.SaleFile;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +34,7 @@ public class ReviewManagementService {
     private final ReviewManagementRepository reviewManagementRepository;
     private final ReviewFileRepository reviewFileRepository;
     private final OrderOptionRepository orderOptionRepository;
+    private final SaleFileRepository saleFileRepository;
     private final NCPObjectStorageService ncpImageService;
 
     @Transactional(readOnly = true)
@@ -70,11 +74,20 @@ public class ReviewManagementService {
         Review review = reviewManagementRepository.findById(reviewId)
                 .orElseThrow(() -> new ResourceNotFoundException("review", reviewId));
 
+        String productImage = null;
+        Optional<SaleFile> saleMainImage = saleFileRepository.findBySaleAndIsMainIsFalse(review.getSale());
+        if (saleMainImage.isPresent()) {
+            productImage = ncpImageService.getObjectStorageImageUrl("product/" + saleMainImage.get().getSaveFile());
+        }
+
         List<ReviewFile> reviewFiles = reviewFileRepository.findByReviewId(reviewId);
+        List<String> reviewImages = reviewFiles.stream()
+                .map(r -> ncpImageService.getReviewImageUrl(r.getSaveFile()))
+                .toList();
 
         List<OrderOption> orderOptions = orderOptionRepository.findByOrderId(review.getOrder().getId());
 
-        return ReviewDetailResponse.fromEntity(review, reviewFiles, orderOptions, ncpImageService);
+        return ReviewDetailResponse.fromEntity(review, reviewImages, productImage, orderOptions, ncpImageService);
     }
 
     @Transactional

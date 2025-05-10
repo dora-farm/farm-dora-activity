@@ -34,6 +34,8 @@ public class NCPObjectStorageService implements StorageService {
     // 배너 이미지 옵션: 가로 1320px, 세로 300px, 고품질
     private final String bannerImageOption = "?type=m&w=1320&h=300&bgcolor=FFFFFF&quality=90&anilimit=1&ttype=jpg";
 
+    private final String reviewImageOption = "?type=f&w=700&h=700&quality=90&align=4";
+
     public NCPObjectStorageService(
             @Value("${ncp.object-storage.endpoint}") String endpoint,
             @Value("${ncp.object-storage.region}") String region,
@@ -147,6 +149,10 @@ public class NCPObjectStorageService implements StorageService {
 
     public String getBannerImageUrl(String objectName) {
         return String.format("%s%s%s%s", "https://" + cdnDomain + "/", projectId + "/", objectName, bannerImageOption);
+    }
+
+    public String getReviewImageUrl(String objectName) {
+        return String.format("%s%s%s%s", "https://" + cdnDomain + "/", projectId + "/", objectName, reviewImageOption);
     }
 
     public void delete(String filePath) {

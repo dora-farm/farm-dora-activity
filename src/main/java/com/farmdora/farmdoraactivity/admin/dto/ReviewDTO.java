@@ -60,14 +60,9 @@ public class ReviewDTO {
         private String userName;  // 리뷰 작성자 정보
 
         // 상세 조회용 상세 정보로 변환
-        public static ReviewDetailResponse fromEntity(Review review, List<ReviewFile> reviewFiles,
+        public static ReviewDetailResponse fromEntity(Review review, List<String> reviewImages, String productImage,
                                                       List<OrderOption> orderOptions, NCPObjectStorageService ncpImageService) {
             Sale sale = review.getSale();
-            User user = review.getOrder().getUser();
-            // 파일명을 전체 URL로 변환
-            List<String> imageUrls = reviewFiles.stream()
-                    .map(file -> ncpImageService.getObjectStorageImageUrl(file.getSaveFile()))
-                    .collect(Collectors.toList());
 
             // 리뷰의 saleId와 동일한 옵션만 필터링하여 변환
             List<OrderOptionInfo> options = orderOptions.stream()
@@ -79,13 +74,13 @@ public class ReviewDTO {
                     .reviewId(review.getId())
                     .saleId(sale.getId())
                     .productName(sale.getTitle())
-                    .productImage(ncpImageService.getObjectStorageImageUrl(sale.getSeller().getSaveFile()))
+                    .productImage(productImage)
                     .content(review.getContent())
                     .score(review.getScore())
                     .createdDate(review.getCreatedDate())
-                    .imageUrls(imageUrls)
+                    .imageUrls(reviewImages)
                     .orderOptions(options)
-                    .userName(user.getName())
+                    .userName(review.getOrder().getUser().getName())
                     .build();
         }
     }
